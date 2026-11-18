@@ -4,23 +4,61 @@
 
 ## 订阅地址
 
-```
-https://cdn.jsdelivr.net/gh/Ozero-top/adguardhome-rules@dist/512/ads.txt
-```
+产物发布在 `dist` 分支，**按设备内存只选一档订阅**，同一档内的文件要全部添加。
 
-国内访问 jsDelivr 不稳定时可换 raw：
+可用前缀（国内优先 jsDelivr，不稳定时换 raw）：
 
 ```
-https://raw.githubusercontent.com/Ozero-top/adguardhome-rules/dist/512/ads.txt
+https://cdn.jsdelivr.net/gh/Ozero-top/AdguardHome-Rrules@dist/
+https://raw.githubusercontent.com/Ozero-top/AdguardHome-Rrules/dist/
+```
+
+### 512MB 内存
+
+```
+https://cdn.jsdelivr.net/gh/Ozero-top/AdguardHome-Rrules@dist/512/security.txt
+https://cdn.jsdelivr.net/gh/Ozero-top/AdguardHome-Rrules@dist/512/chinese.txt
+https://cdn.jsdelivr.net/gh/Ozero-top/AdguardHome-Rrules@dist/512/ads.txt
+```
+
+### 1GB 内存
+
+```
+https://cdn.jsdelivr.net/gh/Ozero-top/AdguardHome-Rrules@dist/1024/security.txt
+https://cdn.jsdelivr.net/gh/Ozero-top/AdguardHome-Rrules@dist/1024/chinese.txt
+https://cdn.jsdelivr.net/gh/Ozero-top/AdguardHome-Rrules@dist/1024/tracking.txt
+https://cdn.jsdelivr.net/gh/Ozero-top/AdguardHome-Rrules@dist/1024/ads.txt
+https://cdn.jsdelivr.net/gh/Ozero-top/AdguardHome-Rrules@dist/1024/annoyances.txt
+```
+
+### 2GB 及以上内存
+
+```
+https://cdn.jsdelivr.net/gh/Ozero-top/AdguardHome-Rrules@dist/2048/security.txt
+https://cdn.jsdelivr.net/gh/Ozero-top/AdguardHome-Rrules@dist/2048/chinese.txt
+https://cdn.jsdelivr.net/gh/Ozero-top/AdguardHome-Rrules@dist/2048/tracking.txt
+https://cdn.jsdelivr.net/gh/Ozero-top/AdguardHome-Rrules@dist/2048/ads.txt
+https://cdn.jsdelivr.net/gh/Ozero-top/AdguardHome-Rrules@dist/2048/annoyances.txt
+https://cdn.jsdelivr.net/gh/Ozero-top/AdguardHome-Rrules@dist/2048/social.txt
+```
+
+### 可选
+
+```
+# 白名单，三档通用，建议一起添加
+https://cdn.jsdelivr.net/gh/Ozero-top/AdguardHome-Rrules@dist/allowlist.txt
+
+# 成人内容，默认不启用，需要时手动添加
+https://cdn.jsdelivr.net/gh/Ozero-top/AdguardHome-Rrules@dist/manual/nsfw.txt
 ```
 
 ## 档位与分类
 
-| 档位 | 分类文件 | 单类预算 | 实测总条数 |
-|---|---|---|---|
-| 512（512MB 内存） | security、chinese、ads | 1.5 万 / 6 万 / 6 万 | 约 13.3 万 |
-| 1024（1GB 内存） | + tracking、annoyances | 1.5 万 / 12 万 / 8 千 / 12 万 / 3 千 | 约 26.2 万 |
-| 2048（2GB 及以上） | + social | 不限 | 约 57.3 万 |
+| 档位 | 分类文件 | 实测条数 |
+|---|---|---|
+| 512（512MB 内存） | security 13090、chinese 60000、ads 60000 | 133,090 |
+| 1024（1GB 内存） | security 13090、chinese 120000、tracking 6406、ads 120000、annoyances 2277 | 261,773 |
+| 2048（2GB 及以上） | security 13090、chinese 245983、tracking 6406、ads 304638、annoyances 2277、social 180 | 572,574 |
 
 - 同一档位内各分类文件互不重复：一条域名只归属档内优先级最高的分类。
 - 超出单类预算时，按「被更多上游同时收录」的次数优先保留，再按域名排序截断；截断数量写入 `meta.json`。
