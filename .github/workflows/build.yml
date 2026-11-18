@@ -12,6 +12,11 @@ on:
       - "tools/**"
       - ".github/workflows/build.yml"
   workflow_dispatch:
+    inputs:
+      allow_drift:
+        description: "允许条数波动（重构规则时勾选）"
+        type: boolean
+        default: false
 
 permissions:
   contents: write
@@ -41,7 +46,13 @@ jobs:
           git show FETCH_HEAD:meta.json > previous/meta.json 2>/dev/null || true
 
       - name: 产物门禁
-        run: python tools/verify.py --out build --previous previous/meta.json
+        run: |
+          # 主动重构（分类调整、规则语义修正）会造成条数大幅波动，此时允许带 --allow-drift
+          if [ "${{ inputs.allow_drift }}" = "true" ] || git log -1 --pretty=%B | grep -q "\[allow-drift\]"; then
+            python tools/verify.py --out build --previous previous/meta.json --allow-drift
+          else
+            python tools/verify.py --out build --previous previous/meta.json
+          fi
 
       - name: 保存产物
         uses: actions/upload-artifact@v4
