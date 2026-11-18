@@ -1,0 +1,20 @@
+# 手工维护的广告根域清单
+#
+# 用途：上游规则通常只收录「见过的具体子域」（如 df.tanx.com、ef.tanx.com），
+# 广告平台随时新增的动态子域（如 dfhs.tanx.com）就会漏拦。这里用整域兜底。
+#
+# 收录标准（必须同时满足）：
+#   1. 该注册域整体只用于广告/监测，不承载正常业务页面；
+#   2. 上游已将其多个子域标为广告（可在 build 产物中检索确认）；
+#   3. 不是公共后缀或托管域（禁止出现 com.br、vercel.app、cloudfront.net 之类）。
+#
+# 每条会被并入 ads 分类，进入所有档位。
+
+tanx.com
+alimama.com
+mmstat.com
+admaster.com.cn
+miaozhen.com
+ipinyou.com
+mediav.com
+adchina.com
