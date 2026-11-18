@@ -1,0 +1,59 @@
+name: build-rules
+
+on:
+  schedule:
+    # 每 7 天 03:00 UTC（北京时间 11:00）重建一次
+    - cron: "0 3 */7 * *"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: build-rules
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: 构建规则
+        run: python tools/build.py --out build
+
+      - name: 取上轮结果做波动对比
+        run: |
+          mkdir -p previous
+          git fetch --depth=1 origin dist || true
+          git show FETCH_HEAD:meta.json > previous/meta.json 2>/dev/null || true
+
+      - name: 产物门禁
+        run: python tools/verify.py --out build --previous previous/meta.json
+
+      - name: 保存产物
+        uses: actions/upload-artifact@v4
+        with:
+          name: rules-${{ github.run_number }}
+          path: build/
+          retention-days: 30
+
+      - name: 发布到 dist 分支
+        run: |
+          set -e
+          rm -rf /tmp/publish
+          mkdir -p /tmp/publish
+          cp -r build/. /tmp/publish/
+          cd /tmp/publish
+          git init -q
+          git checkout -q -b dist
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          git commit -q -m "rules: $(date -u +%Y-%m-%d)"
+          git push --force "https://x-access-token:${{ github.token }}@github.com/${{ github.repository }}.git" dist
