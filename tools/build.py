@@ -1,0 +1,340 @@
+#!/usr/bin/env python3
+"""规则构建：抓取 → 归一化 → 分类 → 去重 → 分档产物。
+
+用法：
+    python tools/build.py                 输出到 build/
+    python tools/build.py --out out       指定输出目录
+    python tools/build.py --offline       只用 build/cache 里的缓存，不联网
+
+退出码 0 表示构建成功；1 表示有源失败或产物异常。
+"""
+
+import argparse
+import concurrent.futures
+import hashlib
+import json
+import re
+import shutil
+import ssl
+import sys
+import time
+import tomllib
+import urllib.error
+import urllib.request
+from datetime import datetime, timezone
+from pathlib import Path
+
+ROOT = Path(__file__).resolve().parents[1]
+CONFIG = ROOT / "sources.toml"
+CACHE = ROOT / ".cache"
+REPO_URL = "https://github.com/Ozero-top/adguardhome-rules"
+
+# 直连失败后依次尝试国内反代，前缀直接拼在原始 URL 前面
+PROXIES = ["", "https://gh-proxy.org/", "https://ghfast.top/", "https://gh-proxy.com/"]
+USER_AGENT = "adguardhome-rules-builder/1.0"
+TIMEOUT = 25
+
+IPV4_PREFIX = re.compile(r"^(?:0\.0\.0\.0|127\.0\.0\.1|255\.255\.255\.255)\s+(\S+)")
+IPV6_PREFIX = re.compile(r"^(?:::1?|0:0:0:0:0:0:0:1)\s+(\S+)")
+HOSTS_SUFFIX = re.compile(r"\s+#.*$")
+DOMAIN = re.compile(r"^[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?(?:\.[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?)+$")
+INVALID_DOMAINS = {
+    "localhost", "localhost.localdomain", "local", "broadcasthost",
+    "ip6-localhost", "ip6-loopback", "ip6-allnodes", "ip6-allrouters",
+    "0.0.0.0", "127.0.0.1", "::1",
+}
+
+
+def log(msg):
+    print(msg, flush=True)
+
+
+def fetch(url, offline=False):
+    """下载单个源，返回 (文本, 使用的地址, 字节数)。offline 时只读缓存。"""
+    digest = hashlib.sha256(url.encode()).hexdigest()[:16]
+    cache_file = CACHE / ("%s.txt" % digest)
+    if offline:
+        if not cache_file.exists():
+            raise RuntimeError("离线模式缺少缓存：%s" % url)
+        blob = cache_file.read_bytes()
+        return blob.decode("utf-8", "replace"), "cache", len(blob)
+
+    if cache_file.exists() and time.time() - cache_file.stat().st_mtime < 12 * 3600:
+        blob = cache_file.read_bytes()
+        return blob.decode("utf-8", "replace"), "cache", len(blob)
+
+    last_error = None
+    context = ssl.create_default_context()
+    for prefix in PROXIES:
+        target = prefix + url
+        for attempt in range(1):
+            try:
+                request = urllib.request.Request(target, headers={"User-Agent": USER_AGENT})
+                with urllib.request.urlopen(request, timeout=TIMEOUT, context=context) as resp:
+                    blob = resp.read()
+                if not blob:
+                    raise RuntimeError("响应为空")
+                CACHE.mkdir(parents=True, exist_ok=True)
+                cache_file.write_bytes(blob)
+                return blob.decode("utf-8", "replace"), target, len(blob)
+            except Exception as exc:  # noqa: BLE001
+                last_error = exc
+    raise RuntimeError("下载失败：%s（%s）" % (url, last_error))
+
+
+def normalize_domain(raw):
+    """清洗单个域名，非法返回 None。"""
+    name = raw.strip().lower().strip(".")
+    if not name or name in INVALID_DOMAINS:
+        return None
+    if "*" in name or "?" in name or "/" in name or ":" in name or "@" in name:
+        return None
+    try:
+        name = name.encode("idna").decode("ascii")
+    except UnicodeError:
+        return None
+    if len(name) > 253 or not DOMAIN.match(name):
+        return None
+    if name.rsplit(".", 1)[-1] in ("local", "localhost", "invalid", "test"):
+        return None
+    return name
+
+
+def parse_line(line):
+    """返回 (域名, 是否白名单)；无法解析返回 (None, False)。"""
+    text = line.strip()
+    if not text or text[0] in "!#[":
+        return None, False
+    whitelist = text.startswith("@@")
+    if whitelist:
+        text = text[2:]
+    if text.startswith("/") or "##" in text or "#@#" in text or "#?#" in text:
+        return None, False
+
+    if text.startswith("||"):
+        body = text[2:]
+        for stop in ("^", "$", "/", "|"):
+            body = body.split(stop, 1)[0]
+        return normalize_domain(body), whitelist
+
+    if text.startswith("|") or text.startswith("http://") or text.startswith("https://"):
+        return None, False
+
+    text = HOSTS_SUFFIX.sub("", text)
+    match = IPV4_PREFIX.match(text) or IPV6_PREFIX.match(text)
+    if match:
+        return normalize_domain(match.group(1)), whitelist
+
+    return normalize_domain(text.split()[0]), whitelist
+
+
+def parse_source(text):
+    """解析整份规则，返回 (黑名单域名集合, 白名单域名集合)。"""
+    blocked, allowed = set(), set()
+    for line in text.splitlines():
+        domain, is_allow = parse_line(line)
+        if not domain:
+            continue
+        (allowed if is_allow else blocked).add(domain)
+    return blocked, allowed
+
+
+def write_rule_file(path, title, desc, categories, domains, sources, version, now):
+    path.parent.mkdir(parents=True, exist_ok=True)
+    header = [
+        "! Title: %s" % title,
+        "! Description: %s" % desc,
+        "! Version: %s" % version,
+        "! Updated: %s" % now,
+        "! Count: %d" % len(domains),
+        "! Sources: %s" % ", ".join(sources),
+        "! License: %s/blob/main/LICENSES.md" % REPO_URL,
+        "!",
+    ]
+    body = ["||%s^" % domain for domain in domains]
+    path.write_text("\n".join(header + body) + "\n", encoding="utf-8", newline="\n")
+
+
+def render_licenses(config):
+    lines = [
+        "# 规则来源与许可",
+        "",
+        "本仓库产物由下列上游规则集合并、去重、分类生成。各上游的著作权与许可归其作者所有，",
+        "分发与本仓库产物使用请遵守对应许可；标注「见上游仓库」的条目请以该仓库声明为准。",
+        "",
+        "| 来源 | 说明 | 许可 | 仓库 |",
+        "|---|---|---|---|",
+    ]
+    for item in config["sources"] + config.get("whitelist", []):
+        lines.append("| %s | %s | %s | %s |" % (
+            item["name"], item["id"], item.get("license", "-"), item.get("homepage", "-")))
+    lines += [
+        "",
+        "AdGuard 官方规则集（FiltersRegistry / HostlistsRegistry）为 GPL-3.0；",
+        "anti-AD 为 GPL-3.0；其余来源许可见上表链接。如上游变更许可，请以变更后的声明为准。",
+        "",
+    ]
+    return "\n".join(lines)
+
+
+def clean_output(out):
+    """只清理本脚本生成的产物，不动输出目录里的其他文件。"""
+    for name in ("512", "1024", "2048", "manual", "cache"):
+        shutil.rmtree(out / name, ignore_errors=True)
+    for name in ("allowlist.txt", "meta.json", "LICENSES.md"):
+        (out / name).unlink(missing_ok=True)
+
+
+def main():
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--out", default=str(ROOT / "build"))
+    parser.add_argument("--offline", action="store_true", help="只用缓存，不联网")
+    parser.add_argument("--workers", type=int, default=6)
+    args = parser.parse_args()
+
+    out = Path(args.out)
+    clean_output(out)
+    config = tomllib.loads(CONFIG.read_text(encoding="utf-8"))
+    now = datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
+    version = datetime.now(timezone.utc).strftime("%Y%m%d")
+
+    sources = config["sources"]
+    whitelist_sources = config.get("whitelist", [])
+
+    # 抓取（并发）
+    results = {}
+    failures = []
+    with concurrent.futures.ThreadPoolExecutor(max_workers=args.workers) as pool:
+        futures = {pool.submit(fetch, item["url"], args.offline): item for item in sources + whitelist_sources}
+        for future in concurrent.futures.as_completed(futures):
+            item = futures[future]
+            try:
+                text, used, size = future.result()
+                results[item["id"]] = {"text": text, "used": used, "bytes": size}
+                log("  OK   %-22s %7d 字节" % (item["id"], size))
+            except Exception as exc:  # noqa: BLE001
+                failures.append(item["id"])
+                log("  FAIL %-22s %s" % (item["id"], exc))
+
+    # 归一化 + 分类
+    blocked = {}   # domain -> {"categories": set(), "sources": set()}
+    allowed = {}   # domain -> set(source name)
+    source_stats = {}
+    for item in sources:
+        data = results.get(item["id"])
+        if not data:
+            source_stats[item["id"]] = {"status": "failed"}
+            continue
+        domains, allows = parse_source(data["text"])
+        for domain in domains:
+            entry = blocked.setdefault(domain, {"categories": set(), "sources": set()})
+            entry["categories"].update(item["categories"])
+            entry["sources"].add(item["id"])
+        for domain in allows:
+            allowed.setdefault(domain, set()).add(item["name"])
+        source_stats[item["id"]] = {
+            "status": "ok",
+            "url": item["url"],
+            "bytes": data["bytes"],
+            "domains": len(domains),
+            "allow": len(allows),
+            "categories": item["categories"],
+        }
+
+    for item in whitelist_sources:
+        data = results.get(item["id"])
+        if not data:
+            source_stats[item["id"]] = {"status": "failed"}
+            continue
+        domains, allows = parse_source(data["text"])
+        merged = domains | allows
+        for domain in merged:
+            allowed.setdefault(domain, set()).add(item["name"])
+        source_stats[item["id"]] = {"status": "ok", "url": item["url"], "bytes": data["bytes"], "domains": len(merged)}
+
+    log("")
+    log("合并后黑名单 %d 条，白名单 %d 条" % (len(blocked), len(allowed)))
+
+    # 分档：一条规则在档内只归一个分类，按 tiers 顺序取第一个命中
+    tiers = config["tiers"]
+    budgets = config.get("budgets", {})
+    categories = config["categories"]
+    meta_tiers = {}
+    for tier in sorted(tiers, key=int):
+        order = tiers[tier]
+        tier_budget = budgets.get(str(tier), {})
+        buckets = {name: [] for name in order}
+        for domain in sorted(blocked):
+            labels = blocked[domain]["categories"]
+            for name in order:
+                if name in labels:
+                    buckets[name].append((domain, len(blocked[domain]["sources"])))
+                    break
+        meta_files = {}
+        meta_dropped = {}
+        for name in order:
+            items = buckets[name]
+            limit = tier_budget.get(name)
+            dropped = 0
+            if limit and len(items) > limit:
+                # 被更多上游同时收录的域名更可靠，优先保留
+                items.sort(key=lambda pair: (-pair[1], pair[0]))
+                dropped = len(items) - limit
+                items = items[:limit]
+            domains = sorted(domain for domain, _count in items)
+            info = categories.get(name, {})
+            write_rule_file(
+                out / str(tier) / ("%s.txt" % name),
+                "AGH Rules %s · %s" % (tier, info.get("title", name)),
+                info.get("desc", name),
+                [name], domains,
+                sorted({s["name"] for s in sources if name in s["categories"]}),
+                version, now,
+            )
+            meta_files[name] = len(domains)
+            if dropped:
+                meta_dropped[name] = dropped
+            log("  %s/%-11s %7d 条%s" % (
+                tier, name, len(domains),
+                "（预算 %d，截断 %d）" % (limit, dropped) if dropped else ""))
+        meta_tiers[str(tier)] = {
+            "files": meta_files,
+            "total": sum(meta_files.values()),
+            "dropped": meta_dropped,
+        }
+
+    # 白名单与成人内容单独发布
+    write_rule_file(out / "allowlist.txt", "AGH Rules · 白名单", "放行域名，优先级高于所有拦截规则",
+                    ["whitelist"], sorted(allowed),
+                    sorted({s["name"] for s in whitelist_sources}), version, now)
+    log("  allowlist.txt      %7d 条" % len(allowed))
+
+    adult = sorted(d for d, entry in blocked.items() if "adult" in entry["categories"])
+    if adult:
+        write_rule_file(out / "manual" / "nsfw.txt", "AGH Rules · 成人内容", "需手动开启，不进入任何档位",
+                        ["adult"], adult, ["HaGeZi NSFW"], version, now)
+        log("  manual/nsfw.txt    %7d 条" % len(adult))
+
+    (out / "LICENSES.md").write_text(render_licenses(config), encoding="utf-8", newline="\n")
+
+    meta = {
+        "version": version,
+        "generated_at": now,
+        "blocked_total": len(blocked),
+        "allow_total": len(allowed),
+        "tiers": meta_tiers,
+        "sources": source_stats,
+        "failures": failures,
+    }
+    (out / "meta.json").write_text(json.dumps(meta, ensure_ascii=False, indent=2) + "\n",
+                                   encoding="utf-8", newline="\n")
+
+    if failures:
+        log("")
+        log("有 %d 个源下载失败：%s" % (len(failures), ", ".join(failures)))
+        return 1
+    return 0
+
+
+if __name__ == "__main__":
+    sys.exit(main())

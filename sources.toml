@@ -1,0 +1,283 @@
+# 规则来源清单：本文件是构建的唯一输入，新增/删除源只改这里
+# categories 可多选：ads / chinese / tracking / security / annoyances / social / adult / misc
+# tier = "manual" 表示只单独发布，不自动加入档位（如成人内容）
+
+version = 1
+
+# ---------------- 黑名单来源 ----------------
+
+# AdGuard 官方 FiltersRegistry（adblock 语法，构建时抽域名）
+[[sources]]
+id = "adg-base"
+name = "AdGuard Base"
+url = "https://raw.githubusercontent.com/AdguardTeam/FiltersRegistry/master/filters/filter_2_Base/filter.txt"
+categories = ["ads"]
+license = "GPL-3.0"
+homepage = "https://github.com/AdguardTeam/FiltersRegistry"
+
+[[sources]]
+id = "adg-spyware"
+name = "AdGuard Spyware"
+url = "https://raw.githubusercontent.com/AdguardTeam/FiltersRegistry/master/filters/filter_3_Spyware/filter.txt"
+categories = ["tracking"]
+license = "GPL-3.0"
+homepage = "https://github.com/AdguardTeam/FiltersRegistry"
+
+[[sources]]
+id = "adg-trackparam"
+name = "AdGuard URL Tracking"
+url = "https://raw.githubusercontent.com/AdguardTeam/FiltersRegistry/master/filters/filter_17_TrackParam/filter.txt"
+categories = ["tracking"]
+license = "GPL-3.0"
+homepage = "https://github.com/AdguardTeam/FiltersRegistry"
+
+[[sources]]
+id = "adg-social"
+name = "AdGuard Social"
+url = "https://raw.githubusercontent.com/AdguardTeam/FiltersRegistry/master/filters/filter_4_Social/filter.txt"
+categories = ["social"]
+license = "GPL-3.0"
+homepage = "https://github.com/AdguardTeam/FiltersRegistry"
+
+[[sources]]
+id = "adg-annoyances"
+name = "AdGuard Annoyances"
+url = "https://raw.githubusercontent.com/AdguardTeam/FiltersRegistry/master/filters/filter_14_Annoyances/filter.txt"
+categories = ["annoyances"]
+license = "GPL-3.0"
+homepage = "https://github.com/AdguardTeam/FiltersRegistry"
+
+[[sources]]
+id = "adg-annoy-cookies"
+name = "AdGuard Cookie Notices"
+url = "https://raw.githubusercontent.com/AdguardTeam/FiltersRegistry/master/filters/filter_18_Annoyances_Cookies/filter.txt"
+categories = ["annoyances"]
+license = "GPL-3.0"
+homepage = "https://github.com/AdguardTeam/FiltersRegistry"
+
+[[sources]]
+id = "adg-annoy-popups"
+name = "AdGuard Popups"
+url = "https://raw.githubusercontent.com/AdguardTeam/FiltersRegistry/master/filters/filter_19_Annoyances_Popups/filter.txt"
+categories = ["annoyances"]
+license = "GPL-3.0"
+homepage = "https://github.com/AdguardTeam/FiltersRegistry"
+
+[[sources]]
+id = "adg-annoy-mobile"
+name = "AdGuard Mobile App Banners"
+url = "https://raw.githubusercontent.com/AdguardTeam/FiltersRegistry/master/filters/filter_20_Annoyances_MobileApp/filter.txt"
+categories = ["annoyances"]
+license = "GPL-3.0"
+homepage = "https://github.com/AdguardTeam/FiltersRegistry"
+
+[[sources]]
+id = "adg-annoy-other"
+name = "AdGuard Other Annoyances"
+url = "https://raw.githubusercontent.com/AdguardTeam/FiltersRegistry/master/filters/filter_21_Annoyances_Other/filter.txt"
+categories = ["annoyances"]
+license = "GPL-3.0"
+homepage = "https://github.com/AdguardTeam/FiltersRegistry"
+
+[[sources]]
+id = "adg-useful"
+name = "AdGuard Useful Ads"
+url = "https://raw.githubusercontent.com/AdguardTeam/FiltersRegistry/master/filters/filter_10_Useful/filter.txt"
+categories = ["annoyances"]
+license = "GPL-3.0"
+homepage = "https://github.com/AdguardTeam/FiltersRegistry"
+
+[[sources]]
+id = "adg-mail"
+name = "AdGuard Mail Tracking"
+url = "https://raw.githubusercontent.com/AdguardTeam/FiltersRegistry/master/filters/filter_25_Mail_Tracking_Protection/filter.txt"
+categories = ["tracking"]
+license = "GPL-3.0"
+homepage = "https://github.com/AdguardTeam/FiltersRegistry"
+
+[[sources]]
+id = "adg-chinese"
+name = "AdGuard Chinese"
+url = "https://raw.githubusercontent.com/AdguardTeam/FiltersRegistry/master/filters/filter_224_Chinese/filter.txt"
+categories = ["chinese", "ads"]
+license = "GPL-3.0"
+homepage = "https://github.com/AdguardTeam/FiltersRegistry"
+
+[[sources]]
+id = "adg-mobile"
+name = "AdGuard Mobile Ads"
+url = "https://raw.githubusercontent.com/AdguardTeam/FiltersRegistry/master/filters/filter_11_Mobile/filter.txt"
+categories = ["ads", "annoyances"]
+license = "GPL-3.0"
+homepage = "https://github.com/AdguardTeam/FiltersRegistry"
+
+[[sources]]
+id = "adg-dnsfilter"
+name = "AdGuard DNS Filter"
+url = "https://raw.githubusercontent.com/AdguardTeam/FiltersRegistry/master/filters/filter_15_DnsFilter/filter.txt"
+categories = ["ads"]
+license = "GPL-3.0"
+homepage = "https://github.com/AdguardTeam/FiltersRegistry"
+
+# HostlistsRegistry（hosts / 域名语法）
+[[sources]]
+id = "hostlist-dns"
+name = "AdGuard DNS filter"
+url = "https://adguardteam.github.io/HostlistsRegistry/assets/filter_1.txt"
+categories = ["ads"]
+license = "GPL-3.0"
+homepage = "https://github.com/AdguardTeam/HostlistsRegistry"
+
+[[sources]]
+id = "hostlist-adaway"
+name = "AdAway Default Blocklist"
+url = "https://adguardteam.github.io/HostlistsRegistry/assets/filter_2.txt"
+categories = ["ads"]
+license = "GPL-3.0"
+homepage = "https://github.com/AdguardTeam/HostlistsRegistry"
+
+[[sources]]
+id = "hostlist-tracking"
+name = "AdGuard Tracking Protection"
+url = "https://adguardteam.github.io/HostlistsRegistry/assets/filter_3.txt"
+categories = ["tracking"]
+license = "GPL-3.0"
+homepage = "https://github.com/AdguardTeam/HostlistsRegistry"
+
+[[sources]]
+id = "hostlist-malware"
+name = "AdGuard Malware Protection"
+url = "https://adguardteam.github.io/HostlistsRegistry/assets/filter_4.txt"
+categories = ["security"]
+license = "GPL-3.0"
+homepage = "https://github.com/AdguardTeam/HostlistsRegistry"
+
+# 第三方中文与综合源
+[[sources]]
+id = "adrules-dns"
+name = "AdRules DNS List"
+url = "https://raw.githubusercontent.com/Cats-Team/AdRules/main/dns.txt"
+categories = ["ads", "chinese"]
+license = "GPL-3.0"
+homepage = "https://github.com/Cats-Team/AdRules"
+
+[[sources]]
+id = "antiad"
+name = "anti-AD"
+url = "https://anti-ad.net/easylist.txt"
+categories = ["ads", "chinese"]
+license = "GPL-3.0"
+homepage = "https://github.com/privacy-protection-tools/anti-AD"
+
+[[sources]]
+id = "awavenue"
+name = "AWAvenue Ads Rule"
+url = "https://raw.githubusercontent.com/TG-Twilight/AWAvenue-Ads-Rule/main/Filters/AWAvenue-Ads-Rule-Adguard.txt"
+categories = ["ads", "chinese"]
+license = "见上游仓库"
+homepage = "https://github.com/TG-Twilight/AWAvenue-Ads-Rule"
+
+[[sources]]
+id = "goodbye-ads-dns"
+name = "GOODBYEADS"
+url = "https://raw.githubusercontent.com/8680/GOODBYEADS/master/data/rules/dns.txt"
+categories = ["ads", "chinese"]
+license = "见上游仓库"
+homepage = "https://github.com/8680/GOODBYEADS"
+
+[[sources]]
+id = "goodbye-ads-domain"
+name = "GOODBYEADS Domain"
+url = "https://raw.githubusercontent.com/8680/GOODBYEADS/master/data/rules/ad-domain.txt"
+categories = ["ads"]
+license = "见上游仓库"
+homepage = "https://github.com/8680/GOODBYEADS"
+
+[[sources]]
+id = "oisd-big"
+name = "OISD Big"
+url = "https://big.oisd.nl/"
+categories = ["ads"]
+license = "见上游仓库"
+homepage = "https://oisd.nl/"
+
+[[sources]]
+id = "hagezi-pro"
+name = "HaGeZi Multi Pro"
+url = "https://raw.githubusercontent.com/hagezi/dns-blocklists/main/adblock/pro.txt"
+categories = ["ads"]
+license = "见上游仓库"
+homepage = "https://github.com/hagezi/dns-blocklists"
+
+# 只单独发布，不自动加入档位
+[[sources]]
+id = "hagezi-nsfw"
+name = "HaGeZi NSFW"
+url = "https://raw.githubusercontent.com/hagezi/dns-blocklists/main/adblock/nsfw.txt"
+categories = ["adult"]
+tier = "manual"
+license = "见上游仓库"
+homepage = "https://github.com/hagezi/dns-blocklists"
+
+# ---------------- 白名单来源（三档共用） ----------------
+[[whitelist]]
+id = "goodbye-allow"
+name = "GOODBYEADS Allow"
+url = "https://raw.githubusercontent.com/8680/GOODBYEADS/master/data/rules/allow.txt"
+license = "见上游仓库"
+homepage = "https://github.com/8680/GOODBYEADS"
+
+# ---------------- 档位定义 ----------------
+# 列表顺序即「一条规则在档内的归属优先级」，靠前的分类先拿到规则；
+# 每条规则在档内只归属一个分类，保证同档各文件互不重复。
+[tiers]
+"512" = ["security", "chinese", "ads"]
+"1024" = ["security", "chinese", "tracking", "ads", "annoyances"]
+"2048" = ["security", "chinese", "tracking", "ads", "annoyances", "social"]
+
+# 各档单分类条数预算：超出时按「被更多上游收录」优先保留，再按域名排序截断
+# 经验值：AdGuard Home 每条约占 100~200 字节内存，512MB 设备建议总量 15 万以内
+[budgets."512"]
+security = 15000
+chinese = 60000
+ads = 60000
+
+[budgets."1024"]
+security = 15000
+chinese = 120000
+tracking = 8000
+ads = 120000
+annoyances = 3000
+
+# ---------------- 分类显示名 ----------------
+[categories.security]
+title = "安全防护（恶意软件 + 钓鱼）"
+desc = "恶意软件、病毒下载站、钓鱼与诈骗域名"
+
+[categories.chinese]
+title = "中文站点专项"
+desc = "中文网站与国内 App 的广告、统计域名"
+
+[categories.tracking]
+title = "跟踪与统计"
+desc = "埋点、统计、邮件跟踪、跨站跟踪"
+
+[categories.ads]
+title = "通用广告"
+desc = "通用广告与推广域名"
+
+[categories.annoyances]
+title = "干扰元素"
+desc = "弹窗、Cookie 提示、移动横幅、应用推荐"
+
+[categories.social]
+title = "社交挂件"
+desc = "社交分享、点赞、评论嵌入组件"
+
+[categories.adult]
+title = "成人内容"
+desc = "仅在你主动开启时使用，不进入任何档位"
+
+[categories.misc]
+title = "未分类"
+desc = "无法可靠归类的域名"
