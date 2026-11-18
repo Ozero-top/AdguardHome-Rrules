@@ -4,6 +4,13 @@ on:
   schedule:
     # 每 7 天 03:00 UTC（北京时间 11:00）重建一次
     - cron: "0 3 */7 * *"
+  push:
+    # 源清单或构建脚本变更时立即重建
+    branches: [main]
+    paths:
+      - "sources.toml"
+      - "tools/**"
+      - ".github/workflows/build.yml"
   workflow_dispatch:
 
 permissions:
