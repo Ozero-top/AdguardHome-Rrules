@@ -47,8 +47,9 @@ jobs:
 
       - name: 产物门禁
         run: |
-          # 主动重构（分类调整、规则语义修正）会造成条数大幅波动，此时允许带 --allow-drift
-          if [ "${{ inputs.allow_drift }}" = "true" ] || git log -1 --pretty=%B | grep -q "\[allow-drift\]"; then
+          # 主动重构（分类调整、规则语义修正）会造成条数大幅波动，此时允许带 --allow-drift。
+          # 检查最近 5 条提交，便于同一次重构的多个提交共用标记。
+          if [ "${{ inputs.allow_drift }}" = "true" ] || git log -5 --pretty=%B | grep -q "\[allow-drift\]"; then
             python tools/verify.py --out build --previous previous/meta.json --allow-drift
           else
             python tools/verify.py --out build --previous previous/meta.json
