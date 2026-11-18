@@ -24,14 +24,6 @@ license = "GPL-3.0"
 homepage = "https://github.com/AdguardTeam/FiltersRegistry"
 
 [[sources]]
-id = "adg-trackparam"
-name = "AdGuard URL Tracking"
-url = "https://raw.githubusercontent.com/AdguardTeam/FiltersRegistry/master/filters/filter_17_TrackParam/filter.txt"
-categories = ["tracking"]
-license = "GPL-3.0"
-homepage = "https://github.com/AdguardTeam/FiltersRegistry"
-
-[[sources]]
 id = "hagezi-popupads"
 name = "HaGeZi Pop-Up Ads"
 url = "https://raw.githubusercontent.com/hagezi/dns-blocklists/main/adblock/popupads.txt"
@@ -60,38 +52,6 @@ id = "adg-annoy-popups"
 name = "AdGuard Popups"
 url = "https://raw.githubusercontent.com/AdguardTeam/FiltersRegistry/master/filters/filter_19_Annoyances_Popups/filter.txt"
 categories = ["annoyances"]
-license = "GPL-3.0"
-homepage = "https://github.com/AdguardTeam/FiltersRegistry"
-
-[[sources]]
-id = "adg-annoy-mobile"
-name = "AdGuard Mobile App Banners"
-url = "https://raw.githubusercontent.com/AdguardTeam/FiltersRegistry/master/filters/filter_20_Annoyances_MobileApp/filter.txt"
-categories = ["annoyances"]
-license = "GPL-3.0"
-homepage = "https://github.com/AdguardTeam/FiltersRegistry"
-
-[[sources]]
-id = "adg-annoy-other"
-name = "AdGuard Other Annoyances"
-url = "https://raw.githubusercontent.com/AdguardTeam/FiltersRegistry/master/filters/filter_21_Annoyances_Other/filter.txt"
-categories = ["annoyances"]
-license = "GPL-3.0"
-homepage = "https://github.com/AdguardTeam/FiltersRegistry"
-
-[[sources]]
-id = "adg-useful"
-name = "AdGuard Useful Ads"
-url = "https://raw.githubusercontent.com/AdguardTeam/FiltersRegistry/master/filters/filter_10_Useful/filter.txt"
-categories = ["annoyances"]
-license = "GPL-3.0"
-homepage = "https://github.com/AdguardTeam/FiltersRegistry"
-
-[[sources]]
-id = "adg-mail"
-name = "AdGuard Mail Tracking"
-url = "https://raw.githubusercontent.com/AdguardTeam/FiltersRegistry/master/filters/filter_25_Mail_Tracking_Protection/filter.txt"
-categories = ["tracking"]
 license = "GPL-3.0"
 homepage = "https://github.com/AdguardTeam/FiltersRegistry"
 

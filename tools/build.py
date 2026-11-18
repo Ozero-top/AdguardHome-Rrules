@@ -119,9 +119,11 @@ def parse_line(line):
             return None, False
         if "$" in body:
             rule, mods = body.split("$", 1)
-            # 同理，$domain=、$removeparam、$cookie 等修饰只针对特定页面或参数，
-            # 去掉修饰后变成整域拦截会误杀正常站点，只保留 DNS 层有意义的 important。
-            if {m.strip().lower() for m in mods.split(",") if m.strip()} - {"important"}:
+            # $domain=、$removeparam、$cookie 等修饰只针对特定页面或参数，
+            # 去掉修饰后变成整域拦截会误杀正常站点，必须丢弃。
+            # $third-party 在 DNS 层没有"第三方"概念，但语义就是拦这个域，
+            # 降级为纯域规则是安全的，可补回 tanx.com 这类动态子域的根域兜底。
+            if {m.strip().lower() for m in mods.split(",") if m.strip()} - {"important", "third-party"}:
                 return None, False
             body = rule
         if "^" in body:
@@ -253,8 +255,10 @@ def main():
             "status": "ok",
             "url": item["url"],
             "bytes": data["bytes"],
+            "lines": data["text"].count("\n") + 1,
             "domains": len(domains),
             "allow": len(allows),
+            "effective_rate": round(len(domains) / max(1, data["text"].count("\n") + 1), 4),
             "categories": item["categories"],
         }
 
@@ -267,7 +271,28 @@ def main():
         merged = domains | allows
         for domain in merged:
             allowed.setdefault(domain, set()).add(item["name"])
-        source_stats[item["id"]] = {"status": "ok", "url": item["url"], "bytes": data["bytes"], "domains": len(merged)}
+        source_stats[item["id"]] = {
+            "status": "ok",
+            "url": item["url"],
+            "bytes": data["bytes"],
+            "lines": data["text"].count("\n") + 1,
+            "domains": len(merged),
+            "effective_rate": round(len(merged) / max(1, data["text"].count("\n") + 1), 4),
+        }
+
+    # 手工维护的广告根域：上游只收具体子域，动态子域会漏，用这份清单做根域兜底。
+    # 不做自动根域聚合，否则会误杀 *.com.br、*.vercel.app 这类公共/托管域。
+    roots_file = ROOT / "tools" / "ad-roots.txt"
+    roots_added = 0
+    if roots_file.exists():
+        roots, _ = parse_source(roots_file.read_text(encoding="utf-8"))
+        for domain in roots:
+            entry = blocked.setdefault(domain, {"categories": set(), "sources": set()})
+            if "ads" not in entry["categories"]:
+                entry["categories"].add("ads")
+                roots_added += 1
+            entry["sources"].add("ad-roots")
+        log("  手工广告根域        %7d 条（新增 %d）" % (len(roots), roots_added))
 
     log("")
     log("合并后黑名单 %d 条，白名单 %d 条" % (len(blocked), len(allowed)))
@@ -339,6 +364,7 @@ def main():
         "generated_at": now,
         "blocked_total": len(blocked),
         "allow_total": len(allowed),
+        "ad_roots_added": roots_added,
         "tiers": meta_tiers,
         "sources": source_stats,
         "failures": failures,
