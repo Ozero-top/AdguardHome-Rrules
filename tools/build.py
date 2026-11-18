@@ -113,8 +113,25 @@ def parse_line(line):
 
     if text.startswith("||"):
         body = text[2:]
-        for stop in ("^", "$", "/", "|"):
-            body = body.split(stop, 1)[0]
+        # 带路径的规则（||baidu.com/adrc.js）只针对具体 URL，DNS 过滤无法表达；
+        # 提取根域会把整站拦掉，必须整条丢弃。
+        if "/" in body:
+            return None, False
+        if "$" in body:
+            rule, mods = body.split("$", 1)
+            # 同理，$domain=、$removeparam、$cookie 等修饰只针对特定页面或参数，
+            # 去掉修饰后变成整域拦截会误杀正常站点，只保留 DNS 层有意义的 important。
+            if {m.strip().lower() for m in mods.split(",") if m.strip()} - {"important"}:
+                return None, False
+            body = rule
+        if "^" in body:
+            body, rest = body.split("^", 1)
+            # ||domain^extra 表示 URL 级例外（如 ^*&cb=），DNS 层无法表达，
+            # 保留会把整个域名放行/拦截，直接丢弃。
+            if rest not in ("", "|"):
+                return None, False
+        else:
+            body = body.split("|", 1)[0]
         return normalize_domain(body), whitelist
 
     if text.startswith("|") or text.startswith("http://") or text.startswith("https://"):

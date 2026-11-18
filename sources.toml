@@ -1,5 +1,5 @@
 # 规则来源清单：本文件是构建的唯一输入，新增/删除源只改这里
-# categories 可多选：ads / chinese / tracking / security / annoyances / social / adult / misc
+# categories 可多选：ads / chinese / tracking / security / annoyances / adult / misc
 # tier = "manual" 表示只单独发布，不自动加入档位（如成人内容）
 
 version = 1
@@ -32,20 +32,12 @@ license = "GPL-3.0"
 homepage = "https://github.com/AdguardTeam/FiltersRegistry"
 
 [[sources]]
-id = "adg-social"
-name = "AdGuard Social"
-url = "https://raw.githubusercontent.com/AdguardTeam/FiltersRegistry/master/filters/filter_4_Social/filter.txt"
-categories = ["social"]
+id = "hagezi-popupads"
+name = "HaGeZi Pop-Up Ads"
+url = "https://raw.githubusercontent.com/hagezi/dns-blocklists/main/adblock/popupads.txt"
+categories = ["annoyances"]
 license = "GPL-3.0"
-homepage = "https://github.com/AdguardTeam/FiltersRegistry"
-
-[[sources]]
-id = "adg-widgets"
-name = "AdGuard Widgets"
-url = "https://raw.githubusercontent.com/AdguardTeam/FiltersRegistry/master/filters/filter_22_Annoyances_Widgets/filter.txt"
-categories = ["social"]
-license = "GPL-3.0"
-homepage = "https://github.com/AdguardTeam/FiltersRegistry"
+homepage = "https://github.com/hagezi/dns-blocklists"
 
 [[sources]]
 id = "adg-annoyances"
@@ -240,8 +232,8 @@ homepage = "https://github.com/8680/GOODBYEADS"
 # 每条规则在档内只归属一个分类，保证同档各文件互不重复。
 [tiers]
 "512" = ["security", "chinese", "ads"]
-"1024" = ["security", "chinese", "tracking", "ads", "annoyances"]
-"2048" = ["security", "chinese", "tracking", "ads", "annoyances", "social"]
+"1024" = ["security", "chinese", "tracking", "ads"]
+"2048" = ["security", "chinese", "tracking", "ads", "annoyances"]
 
 # 各档单分类条数预算：超出时按「被更多上游收录」优先保留，再按域名排序截断
 # 经验值：AdGuard Home 每条约占 100~200 字节内存，512MB 设备建议总量 15 万以内
@@ -255,7 +247,6 @@ security = 15000
 chinese = 120000
 tracking = 8000
 ads = 120000
-annoyances = 3000
 
 # ---------------- 分类显示名 ----------------
 [categories.security]
@@ -277,10 +268,6 @@ desc = "通用广告与推广域名"
 [categories.annoyances]
 title = "干扰元素"
 desc = "弹窗、Cookie 提示、移动横幅、应用推荐"
-
-[categories.social]
-title = "社交挂件"
-desc = "社交分享、点赞、评论嵌入组件"
 
 [categories.adult]
 title = "成人内容"
