@@ -28,7 +28,6 @@ https://cdn.jsdelivr.net/gh/Ozero-top/AdguardHome-Rrules@dist/1024/security.txt
 https://cdn.jsdelivr.net/gh/Ozero-top/AdguardHome-Rrules@dist/1024/chinese.txt
 https://cdn.jsdelivr.net/gh/Ozero-top/AdguardHome-Rrules@dist/1024/tracking.txt
 https://cdn.jsdelivr.net/gh/Ozero-top/AdguardHome-Rrules@dist/1024/ads.txt
-https://cdn.jsdelivr.net/gh/Ozero-top/AdguardHome-Rrules@dist/1024/annoyances.txt
 ```
 
 ### 2GB 及以上内存
@@ -39,7 +38,6 @@ https://cdn.jsdelivr.net/gh/Ozero-top/AdguardHome-Rrules@dist/2048/chinese.txt
 https://cdn.jsdelivr.net/gh/Ozero-top/AdguardHome-Rrules@dist/2048/tracking.txt
 https://cdn.jsdelivr.net/gh/Ozero-top/AdguardHome-Rrules@dist/2048/ads.txt
 https://cdn.jsdelivr.net/gh/Ozero-top/AdguardHome-Rrules@dist/2048/annoyances.txt
-https://cdn.jsdelivr.net/gh/Ozero-top/AdguardHome-Rrules@dist/2048/social.txt
 ```
 
 ### 可选
@@ -57,8 +55,8 @@ https://cdn.jsdelivr.net/gh/Ozero-top/AdguardHome-Rrules@dist/manual/nsfw.txt
 | 档位 | 分类文件 | 实测条数 |
 |---|---|---|
 | 512（512MB 内存） | security 13090、chinese 60000、ads 60000 | 133,090 |
-| 1024（1GB 内存） | security 13090、chinese 120000、tracking 6406、ads 120000、annoyances 2277 | 261,773 |
-| 2048（2GB 及以上） | security 13090、chinese 245983、tracking 6406、ads 304638、annoyances 2277、social 180 | 572,574 |
+| 1024（1GB 内存） | security 13090、chinese 120000、tracking 1218、ads 120000 | 254,308 |
+| 2048（2GB 及以上） | security 13090、chinese 243218、tracking 1218、ads 300411、annoyances 303 | 558,240 |
 
 - 同一档位内各分类文件互不重复：一条域名只归属档内优先级最高的分类。
 - 超出单类预算时，按「被更多上游同时收录」的次数优先保留，再按域名排序截断；截断数量写入 `meta.json`。
@@ -88,8 +86,8 @@ python tools/verify.py --out build
 ```
 build/
 ├── 512/{security,chinese,ads}.txt
-├── 1024/{security,chinese,tracking,ads,annoyances}.txt
-├── 2048/{security,chinese,tracking,ads,annoyances,social}.txt
+├── 1024/{security,chinese,tracking,ads}.txt
+├── 2048/{security,chinese,tracking,ads,annoyances}.txt
 ├── allowlist.txt
 ├── manual/nsfw.txt
 ├── LICENSES.md
