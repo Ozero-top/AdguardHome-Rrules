@@ -40,6 +40,14 @@ license = "GPL-3.0"
 homepage = "https://github.com/AdguardTeam/FiltersRegistry"
 
 [[sources]]
+id = "adg-widgets"
+name = "AdGuard Widgets"
+url = "https://raw.githubusercontent.com/AdguardTeam/FiltersRegistry/master/filters/filter_22_Annoyances_Widgets/filter.txt"
+categories = ["social"]
+license = "GPL-3.0"
+homepage = "https://github.com/AdguardTeam/FiltersRegistry"
+
+[[sources]]
 id = "adg-annoyances"
 name = "AdGuard Annoyances"
 url = "https://raw.githubusercontent.com/AdguardTeam/FiltersRegistry/master/filters/filter_14_Annoyances/filter.txt"
