@@ -132,7 +132,7 @@ homepage = "https://github.com/privacy-protection-tools/anti-AD"
 [[sources]]
 id = "awavenue"
 name = "AWAvenue Ads Rule"
-url = "https://raw.githubusercontent.com/TG-Twilight/AWAvenue-Ads-Rule/main/Filters/AWAvenue-Ads-Rule-Adguard.txt"
+url = "https://raw.githubusercontent.com/TG-Twilight/AWAvenue-Ads-Rule/main/AWAvenue-Ads-Rule.txt"
 categories = ["ads", "chinese"]
 license = "见上游仓库"
 homepage = "https://github.com/TG-Twilight/AWAvenue-Ads-Rule"
