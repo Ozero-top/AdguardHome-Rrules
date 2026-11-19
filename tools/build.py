@@ -12,6 +12,7 @@
 import argparse
 import concurrent.futures
 import hashlib
+import io
 import json
 import re
 import shutil
@@ -21,6 +22,7 @@ import time
 import tomllib
 import urllib.error
 import urllib.request
+import zipfile
 from datetime import datetime, timezone
 from pathlib import Path
 
@@ -28,6 +30,23 @@ ROOT = Path(__file__).resolve().parents[1]
 CONFIG = ROOT / "sources.toml"
 CACHE = ROOT / ".cache"
 REPO_URL = "https://github.com/Ozero-top/adguardhome-rules"
+
+PSL_URL = "https://publicsuffix.org/list/public_suffix_list.dat"
+PSL_TTL = 7 * 24 * 3600
+TRANCO_URL = "https://tranco-list.eu/top-1m.csv.zip"
+TRANCO_TTL = 7 * 24 * 3600
+
+# 子域聚合门槛：只对「整域只做广告」的高置信根域做整域兜底
+AGG_MIN_CHILDREN = 10      # 同一根域下被拦截的子域数量
+AGG_MIN_SOURCES = 3        # 每个子域至少被这么多上游同时收录
+AGG_RANK_LIMIT = 1000000   # Tranco 前 100 万内的根域不聚合（避免误杀主站）
+
+# 公共后缀规则，构建开始时加载；未加载时跳过相关校验
+_PSL_EXACT = set()
+_PSL_WILD = set()
+_PSL_EXC = set()
+_TRANCO = None
+
 
 # 直连失败后依次尝试国内反代，前缀直接拼在原始 URL 前面
 PROXIES = ["", "https://gh-proxy.org/", "https://ghfast.top/", "https://gh-proxy.com/"]
@@ -82,6 +101,112 @@ def fetch(url, offline=False):
     raise RuntimeError("下载失败：%s（%s）" % (url, last_error))
 
 
+def _cached_download(url, cache_name, ttl, offline=False):
+    """带缓存的整文件下载，失败依次尝试反代。"""
+    cache_file = CACHE / cache_name
+    if offline:
+        if not cache_file.exists():
+            raise RuntimeError("离线模式缺少缓存：%s" % url)
+        return cache_file.read_bytes()
+    if cache_file.exists() and time.time() - cache_file.stat().st_mtime < ttl:
+        return cache_file.read_bytes()
+
+    last_error = None
+    context = ssl.create_default_context()
+    for prefix in PROXIES:
+        try:
+            request = urllib.request.Request(prefix + url, headers={"User-Agent": USER_AGENT})
+            with urllib.request.urlopen(request, timeout=120, context=context) as resp:
+                blob = resp.read()
+            if not blob:
+                raise RuntimeError("响应为空")
+            CACHE.mkdir(parents=True, exist_ok=True)
+            cache_file.write_bytes(blob)
+            return blob
+        except Exception as exc:  # noqa: BLE001
+            last_error = exc
+    raise RuntimeError("下载失败：%s（%s）" % (url, last_error))
+
+
+def load_psl(offline=False):
+    """加载 Public Suffix List；失败时禁用后缀校验与子域聚合。"""
+    global _PSL_EXACT, _PSL_WILD, _PSL_EXC
+    try:
+        blob = _cached_download(PSL_URL, "psl.dat", PSL_TTL, offline)
+    except Exception as exc:  # noqa: BLE001
+        log("  警告：公共后缀列表加载失败，跳过后缀校验与子域聚合（%s）" % exc)
+        return False
+
+    exact, wild, exceptions = set(), set(), set()
+    for line in blob.decode("utf-8", "replace").splitlines():
+        text = line.strip()
+        if not text or text.startswith("//"):
+            continue
+        if text.startswith("!"):
+            exceptions.add(text[1:].lower())
+        elif text.startswith("*."):
+            wild.add(text[2:].lower())
+        else:
+            exact.add(text.lower())
+    _PSL_EXACT, _PSL_WILD, _PSL_EXC = exact, wild, exceptions
+    log("  公共后缀规则        %7d 条" % (len(exact) + len(wild) + len(exceptions)))
+    return True
+
+
+def load_tranco(offline=False):
+    """加载 Tranco Top-1M 热度表；失败时禁用子域聚合（校验仍生效）。"""
+    global _TRANCO
+    try:
+        blob = _cached_download(TRANCO_URL, "tranco-top1m.zip", TRANCO_TTL, offline)
+        with zipfile.ZipFile(io.BytesIO(blob)) as archive:
+            with archive.open(archive.namelist()[0]) as handle:
+                names = set()
+                for line in io.TextIOWrapper(handle, encoding="utf-8"):
+                    parts = line.strip().split(",")
+                    if len(parts) == 2:
+                        names.add(parts[1].lower())
+    except Exception as exc:  # noqa: BLE001
+        log("  警告：Tranco 热度表加载失败，跳过子域聚合（%s）" % exc)
+        _TRANCO = None
+        return False
+    _TRANCO = names
+    log("  Tranco 热度表        %7d 条" % len(names))
+    return True
+
+
+def suffix_len(labels):
+    """返回公共后缀占用的标签数（标准 PSL 匹配：精确 > 通配 > 例外）。"""
+    best = 0
+    for i in range(len(labels)):
+        candidate = ".".join(labels[i:])
+        if candidate in _PSL_EXC:
+            best = max(best, len(labels) - i - 1)
+        elif candidate in _PSL_EXACT:
+            best = max(best, len(labels) - i)
+        elif i > 0 and candidate in _PSL_WILD:
+            best = max(best, len(labels) - i + 1)
+    return best or 1
+
+
+def is_public_suffix(host):
+    """域名本身是公共后缀（com.cn、github.io）时返回 True。"""
+    if not _PSL_EXACT and not _PSL_WILD:
+        return False
+    labels = host.split(".")
+    return len(labels) <= suffix_len(labels)
+
+
+def registrable_domain(host):
+    """按 PSL 取可注册域；未加载 PSL 时退化为后两段。"""
+    labels = host.split(".")
+    if not _PSL_EXACT and not _PSL_WILD:
+        return ".".join(labels[-2:]) if len(labels) >= 2 else None
+    size = suffix_len(labels)
+    if len(labels) <= size:
+        return None
+    return ".".join(labels[-(size + 1):])
+
+
 def normalize_domain(raw):
     """清洗单个域名，非法返回 None。"""
     name = raw.strip().lower().strip(".")
@@ -96,6 +221,9 @@ def normalize_domain(raw):
     if len(name) > 253 or not DOMAIN.match(name):
         return None
     if name.rsplit(".", 1)[-1] in ("local", "localhost", "invalid", "test"):
+        return None
+    # 公共后缀本身（com.cn、github.io）不能当拦截规则，否则整片站点被误杀
+    if is_public_suffix(name):
         return None
     return name
 
@@ -209,7 +337,7 @@ def clean_output(out):
     """只清理本脚本生成的产物，不动输出目录里的其他文件。"""
     for name in ("512", "1024", "2048", "manual", "cache"):
         shutil.rmtree(out / name, ignore_errors=True)
-    for name in ("allowlist.txt", "meta.json", "LICENSES.md"):
+    for name in ("allowlist.txt", "meta.json", "LICENSES.md", "agg-candidates.txt"):
         (out / name).unlink(missing_ok=True)
 
 
@@ -228,6 +356,10 @@ def main():
 
     sources = config["sources"]
     whitelist_sources = config.get("whitelist", [])
+
+    # 后缀校验与聚合都依赖 PSL；热度表只用于聚合护栏，失败不影响构建
+    load_psl(args.offline)
+    load_tranco(args.offline)
 
     # 抓取（并发）
     results = {}
@@ -303,6 +435,59 @@ def main():
             entry["sources"].add("ad-roots")
         log("  手工广告根域        %7d 条（新增 %d）" % (len(roots), roots_added))
 
+    # 子域聚合：把同一根域下大量广告子域收敛为整域规则，覆盖平台临时新增的子域。
+    # 默认只产出候选清单——自动并集会误杀 americanexpress.co.uk、ricoh.ch 这类
+    # 有真实主站的域名（其子域被多个列表误标），确认后写进 tools/ad-roots.txt，
+    # 或在 sources.toml 的 [aggregation] auto = true 时自动并入。
+    agg = config.get("aggregation", {})
+    auto_merge = bool(agg.get("auto", False))
+    min_children = int(agg.get("min_children", AGG_MIN_CHILDREN))
+    min_sources = int(agg.get("min_sources", AGG_MIN_SOURCES))
+
+    agg_roots = []
+    agg_candidates = []
+    if _TRANCO is not None and (_PSL_EXACT or _PSL_WILD):
+        protected = set(allowed)
+        protected |= {r for r in (registrable_domain(a) for a in allowed) if r}
+        groups = {}
+        for domain, entry in blocked.items():
+            if domain in protected:
+                continue
+            root = registrable_domain(domain)
+            if not root or root == domain:
+                continue
+            groups.setdefault(root, []).append((domain, len(entry["sources"])))
+
+        for root, children in groups.items():
+            if len(children) < min_children:
+                continue
+            if root in blocked or root in protected:
+                continue
+            if min(count for _domain, count in children) < min_sources:
+                continue
+            # 根域在 Tranco 前 100 万内说明有真实主站流量，聚合会连主站一起拦掉
+            if root in _TRANCO:
+                continue
+            agg_candidates.append((root, len(children), min(c for _d, c in children)))
+            if not auto_merge:
+                continue
+            categories = set()
+            shared_sources = None
+            for domain, _count in children:
+                categories |= blocked[domain]["categories"]
+                items = blocked[domain]["sources"]
+                shared_sources = set(items) if shared_sources is None else (shared_sources & items)
+            blocked[root] = {"categories": categories, "sources": shared_sources or set()}
+            agg_roots.append(root)
+
+        agg_candidates.sort()
+        candidate_lines = ["# 子域聚合候选：同一根域下大量广告子域", "# 格式：根域  子域数  最小收录源数",
+                           "# 确认无误后复制根域到 tools/ad-roots.txt，或在 sources.toml 开启 [aggregation] auto"]
+        candidate_lines += ["%s\t%d\t%d" % item for item in agg_candidates]
+        (out / "agg-candidates.txt").write_text("\n".join(candidate_lines) + "\n",
+                                                encoding="utf-8", newline="\n")
+        log("  子域聚合候选        %7d 条（自动并入 %d）" % (len(agg_candidates), len(agg_roots)))
+
     log("")
     log("合并后黑名单 %d 条，白名单 %d 条" % (len(blocked), len(allowed)))
 
@@ -374,6 +559,9 @@ def main():
         "blocked_total": len(blocked),
         "allow_total": len(allowed),
         "ad_roots_added": roots_added,
+        "agg_roots_added": len(agg_roots),
+        "agg_candidates_total": len(agg_candidates),
+        "agg_candidates_sample": [item[0] for item in agg_candidates[:50]],
         "tiers": meta_tiers,
         "sources": source_stats,
         "failures": failures,
