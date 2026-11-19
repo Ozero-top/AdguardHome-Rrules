@@ -350,6 +350,7 @@ def main():
 
     out = Path(args.out)
     clean_output(out)
+    out.mkdir(parents=True, exist_ok=True)
     config = tomllib.loads(CONFIG.read_text(encoding="utf-8"))
     now = datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
     version = datetime.now(timezone.utc).strftime("%Y%m%d")
@@ -480,13 +481,17 @@ def main():
             blocked[root] = {"categories": categories, "sources": shared_sources or set()}
             agg_roots.append(root)
 
-        agg_candidates.sort()
-        candidate_lines = ["# 子域聚合候选：同一根域下大量广告子域", "# 格式：根域  子域数  最小收录源数",
-                           "# 确认无误后复制根域到 tools/ad-roots.txt，或在 sources.toml 开启 [aggregation] auto"]
-        candidate_lines += ["%s\t%d\t%d" % item for item in agg_candidates]
-        (out / "agg-candidates.txt").write_text("\n".join(candidate_lines) + "\n",
-                                                encoding="utf-8", newline="\n")
         log("  子域聚合候选        %7d 条（自动并入 %d）" % (len(agg_candidates), len(agg_roots)))
+    else:
+        log("  子域聚合            跳过（PSL 或 Tranco 未就绪）")
+
+    # 无论是否参与聚合都输出候选文件，方便人工确认与留存
+    agg_candidates.sort()
+    candidate_lines = ["# 子域聚合候选：同一根域下大量广告子域", "# 格式：根域  子域数  最小收录源数",
+                       "# 确认无误后复制根域到 tools/ad-roots.txt，或在 sources.toml 开启 [aggregation] auto"]
+    candidate_lines += ["%s\t%d\t%d" % item for item in agg_candidates]
+    (out / "agg-candidates.txt").write_text("\n".join(candidate_lines) + "\n",
+                                            encoding="utf-8", newline="\n")
 
     log("")
     log("合并后黑名单 %d 条，白名单 %d 条" % (len(blocked), len(allowed)))
