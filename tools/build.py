@@ -139,6 +139,15 @@ def parse_line(line):
     if text.startswith("|") or text.startswith("http://") or text.startswith("https://"):
         return None, False
 
+    # Surge / Shadowrocket 模块语法：只取 DOMAIN 与 DOMAIN-SUFFIX，
+    # URL-REWRITE、IP-CIDR、USER-AGENT 等类型在 DNS 层无法表达，直接丢弃。
+    upper = text.upper()
+    if upper.startswith("DOMAIN-SUFFIX,") or upper.startswith("DOMAIN,"):
+        parts = text.split(",")
+        if len(parts) < 2:
+            return None, False
+        return normalize_domain(parts[1]), whitelist
+
     text = HOSTS_SUFFIX.sub("", text)
     match = IPV4_PREFIX.match(text) or IPV6_PREFIX.match(text)
     if match:
