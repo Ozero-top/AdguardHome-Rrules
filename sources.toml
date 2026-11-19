@@ -169,6 +169,38 @@ categories = ["ads"]
 license = "见上游仓库"
 homepage = "https://github.com/hagezi/dns-blocklists"
 
+[[sources]]
+id = "shadowrocket-startup-ad"
+name = "开屏广告拦截（Shadowrocket）"
+url = "https://raw.githubusercontent.com/jiahuawen750-pixel/shadowrocket-rules/main/startup-ad.sgmodule"
+categories = ["ads", "chinese"]
+license = "见上游仓库"
+homepage = "https://github.com/jiahuawen750-pixel/shadowrocket-rules"
+
+[[sources]]
+id = "home-dns-adblock"
+name = "Home DNS Adblock"
+url = "https://raw.githubusercontent.com/abclq/home-dns-adblock/main/dist/adguard-dns-full.txt"
+categories = ["ads", "chinese"]
+license = "见上游仓库"
+homepage = "https://github.com/abclq/home-dns-adblock"
+
+[[sources]]
+id = "ad-dns-rules"
+name = "ad-dns-rules 合并黑名单"
+url = "https://raw.githubusercontent.com/50521136/ad-dns-rules/main/dist/block-merged.txt"
+categories = ["ads"]
+license = "见上游仓库"
+homepage = "https://github.com/50521136/ad-dns-rules"
+
+[[sources]]
+id = "my-ads-rule"
+name = "My Ads Rule"
+url = "https://raw.githubusercontent.com/DickaHandsome/My-Ads-Rule/main/MyRule.txt"
+categories = ["ads"]
+license = "见上游仓库"
+homepage = "https://github.com/DickaHandsome/My-Ads-Rule"
+
 # 只单独发布，不自动加入档位
 [[sources]]
 id = "hagezi-nsfw"
