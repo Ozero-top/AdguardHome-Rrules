@@ -219,6 +219,17 @@ url = "https://raw.githubusercontent.com/8680/GOODBYEADS/master/data/rules/allow
 license = "见上游仓库"
 homepage = "https://github.com/8680/GOODBYEADS"
 
+# ---------------- 子域聚合 ----------------
+# 把同一根域下大量广告子域收敛成整域规则，覆盖平台临时新增的子域。
+# 每次构建都会产出 build/agg-candidates.txt（根域、子域数、最小收录源数）。
+# auto = false 时只生成候选；确认无误后把根域写进 tools/ad-roots.txt 即可并入 ads。
+# 注意：自动并入（auto = true）会拦掉整个根域，实测候选里出现过 americanexpress.co.uk、
+# ricoh.ch 这类有真实主站的域名，因此默认关闭。
+[aggregation]
+auto = false
+min_children = 10
+min_sources = 3
+
 # ---------------- 档位定义 ----------------
 # 列表顺序即「一条规则在档内的归属优先级」，靠前的分类先拿到规则；
 # 每条规则在档内只归属一个分类，保证同档各文件互不重复。
