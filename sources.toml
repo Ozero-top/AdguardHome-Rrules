@@ -79,6 +79,146 @@ categories = ["ads"]
 license = "GPL-3.0"
 homepage = "https://github.com/AdguardTeam/FiltersRegistry"
 
+# AdGuard 官方 CDN（uBlock 语法，与上面 FiltersRegistry 同源，内容一致；
+# 保留这些地址便于上游目录调整时仍可取到）
+[[sources]]
+id = "adg-ext-base"
+name = "AdGuard Base（uBlock）"
+url = "https://filters.adtidy.org/extension/ublock/filters/2.txt"
+categories = ["ads"]
+license = "GPL-3.0"
+homepage = "https://github.com/AdguardTeam/FiltersRegistry"
+
+[[sources]]
+id = "adg-ext-spyware"
+name = "AdGuard Spyware（uBlock）"
+url = "https://filters.adtidy.org/extension/ublock/filters/3.txt"
+categories = ["tracking"]
+license = "GPL-3.0"
+homepage = "https://github.com/AdguardTeam/FiltersRegistry"
+
+[[sources]]
+id = "adg-ext-social"
+name = "AdGuard Social（uBlock）"
+url = "https://filters.adtidy.org/extension/ublock/filters/4.txt"
+categories = ["annoyances"]
+license = "GPL-3.0"
+homepage = "https://github.com/AdguardTeam/FiltersRegistry"
+
+[[sources]]
+id = "adg-ext-mobile"
+name = "AdGuard Mobile Ads（uBlock）"
+url = "https://filters.adtidy.org/extension/ublock/filters/11.txt"
+categories = ["ads", "annoyances"]
+license = "GPL-3.0"
+homepage = "https://github.com/AdguardTeam/FiltersRegistry"
+
+[[sources]]
+id = "adg-ext-annoyances"
+name = "AdGuard Annoyances（uBlock）"
+url = "https://filters.adtidy.org/extension/ublock/filters/14.txt"
+categories = ["annoyances"]
+license = "GPL-3.0"
+homepage = "https://github.com/AdguardTeam/FiltersRegistry"
+
+[[sources]]
+id = "adg-ext-dns"
+name = "AdGuard DNS Filter（uBlock）"
+url = "https://filters.adtidy.org/extension/ublock/filters/15.txt"
+categories = ["ads"]
+license = "GPL-3.0"
+homepage = "https://github.com/AdguardTeam/FiltersRegistry"
+
+[[sources]]
+id = "adg-ext-annoy-other"
+name = "AdGuard Annoyances Other（uBlock）"
+url = "https://filters.adtidy.org/extension/ublock/filters/17.txt"
+categories = ["annoyances"]
+license = "GPL-3.0"
+homepage = "https://github.com/AdguardTeam/FiltersRegistry"
+
+[[sources]]
+id = "adg-ext-chinese"
+name = "AdGuard Chinese（uBlock）"
+url = "https://filters.adtidy.org/extension/ublock/filters/224.txt"
+categories = ["chinese", "ads"]
+license = "GPL-3.0"
+homepage = "https://github.com/AdguardTeam/FiltersRegistry"
+
+[[sources]]
+id = "adg-dns-ios"
+name = "AdGuard DNS filter（iOS）"
+url = "https://filters.adtidy.org/dns/filter_1_ios.txt"
+categories = ["ads"]
+license = "GPL-3.0"
+homepage = "https://github.com/AdguardTeam/FiltersRegistry"
+
+# EasyList 系列与国内常用源
+[[sources]]
+id = "easylist"
+name = "EasyList"
+url = "https://easylist-downloads.adblockplus.org/easylist.txt"
+categories = ["ads"]
+license = "GPL-3.0 / CC BY-SA 3.0"
+homepage = "https://easylist.to/"
+
+[[sources]]
+id = "easyprivacy"
+name = "EasyPrivacy"
+url = "https://easylist-downloads.adblockplus.org/easyprivacy.txt"
+categories = ["tracking"]
+license = "GPL-3.0 / CC BY-SA 3.0"
+homepage = "https://easylist.to/"
+
+[[sources]]
+id = "easylistchina"
+name = "EasyList China"
+url = "https://raw.githubusercontent.com/easylist/easylistchina/master/easylistchina.txt"
+categories = ["chinese", "ads"]
+license = "见上游仓库"
+homepage = "https://github.com/easylist/easylistchina"
+
+[[sources]]
+id = "xinggsf"
+name = "乘风 广告过滤规则"
+url = "https://raw.githubusercontent.com/xinggsf/Adblock-Plus-Rule/master/rule.txt"
+categories = ["chinese", "ads"]
+license = "见上游仓库"
+homepage = "https://github.com/xinggsf/Adblock-Plus-Rule"
+
+# 217heidai/adblockfilters：DNS 与完整过滤两套，各含 lite 版
+[[sources]]
+id = "heidai-dns"
+name = "Adblockfilters DNS"
+url = "https://raw.githubusercontent.com/217heidai/adblockfilters/main/rules/adblockdns.txt"
+categories = ["ads"]
+license = "见上游仓库"
+homepage = "https://github.com/217heidai/adblockfilters"
+
+[[sources]]
+id = "heidai-dns-lite"
+name = "Adblockfilters DNS Lite"
+url = "https://raw.githubusercontent.com/217heidai/adblockfilters/main/rules/adblockdnslite.txt"
+categories = ["ads"]
+license = "见上游仓库"
+homepage = "https://github.com/217heidai/adblockfilters"
+
+[[sources]]
+id = "heidai-filters"
+name = "Adblockfilters 完整规则"
+url = "https://raw.githubusercontent.com/217heidai/adblockfilters/main/rules/adblockfilters.txt"
+categories = ["ads"]
+license = "见上游仓库"
+homepage = "https://github.com/217heidai/adblockfilters"
+
+[[sources]]
+id = "heidai-filters-lite"
+name = "Adblockfilters 完整规则 Lite"
+url = "https://raw.githubusercontent.com/217heidai/adblockfilters/main/rules/adblockfilterslite.txt"
+categories = ["ads"]
+license = "见上游仓库"
+homepage = "https://github.com/217heidai/adblockfilters"
+
 # HostlistsRegistry（hosts / 域名语法）
 [[sources]]
 id = "hostlist-dns"
