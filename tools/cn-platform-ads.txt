@@ -12,8 +12,11 @@ data.bilibili.com
 # 微博 / 新浪：广告位与广告统计
 ads.weibo.com
 ad.weibo.com
+ads.weibo.cn
+ad.weibo.cn
 sax.sina.com.cn
 beacon.sina.com.cn
+sinaads.sina.com.cn
 
 # 抖音 / 字节：贴片与小说广告素材、广告上报
 p6-ad.douyinpic.com
@@ -21,6 +24,7 @@ v6-ad.douyinpic.com
 p3-ad-sign.byteimg.com
 p6-novel-sign.byteimg.com
 ads5-normal-lq.zijieapi.com
+ads.toutiao.com
 log.zijieapi.com
 mon.snssdk.com
 
