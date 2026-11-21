@@ -496,6 +496,21 @@ def main():
     log("")
     log("合并后黑名单 %d 条，白名单 %d 条" % (len(blocked), len(allowed)))
 
+    # 构建级免拦清单：上游误标的基础服务域（如 gw.alicdn.com）在此剔除，
+    # 同时并入白名单产物，保证只订阅 allowlist 的用户也能放行。
+    protect_file = ROOT / "tools" / "protected-domains.txt"
+    protect_set = set()
+    protect_removed = 0
+    if protect_file.exists():
+        protect_set, _ = parse_source(protect_file.read_text(encoding="utf-8"))
+        for domain in protect_set:
+            victims = [d for d in blocked if d == domain or d.endswith("." + domain)]
+            for victim in victims:
+                blocked.pop(victim)
+                protect_removed += 1
+            allowed.setdefault(domain, set()).add("protected-domains")
+        log("  免拦清单            %7d 条（剔除 %d）" % (len(protect_set), protect_removed))
+
     # 分档：一条规则在档内只归一个分类，按 tiers 顺序取第一个命中
     tiers = config["tiers"]
     budgets = config.get("budgets", {})
@@ -545,9 +560,11 @@ def main():
         }
 
     # 白名单与成人内容单独发布
+    allow_sources = {s["name"] for s in whitelist_sources}
+    if protect_set:
+        allow_sources.add("protected-domains")
     write_rule_file(out / "allowlist.txt", "AGH Rules · 白名单", "放行域名，优先级高于所有拦截规则",
-                    ["whitelist"], sorted(allowed),
-                    sorted({s["name"] for s in whitelist_sources}), version, now)
+                    ["whitelist"], sorted(allowed), sorted(allow_sources), version, now)
     log("  allowlist.txt      %7d 条" % len(allowed))
 
     adult = sorted(d for d, entry in blocked.items() if "adult" in entry["categories"])
@@ -564,6 +581,8 @@ def main():
         "blocked_total": len(blocked),
         "allow_total": len(allowed),
         "ad_roots_added": roots_added,
+        "protected_domains": sorted(protect_set),
+        "protected_removed": protect_removed,
         "agg_roots_added": len(agg_roots),
         "agg_candidates_total": len(agg_candidates),
         "agg_candidates_sample": [item[0] for item in agg_candidates[:50]],
