@@ -528,6 +528,20 @@ def main():
     log("")
     log("合并后黑名单 %d 条，白名单 %d 条" % (len(blocked), len(allowed)))
 
+    # 白名单从黑名单剔除：白名单域名及其子域不应再出现在分类文件里，
+    # 否则只订阅分类文件、没订阅 allowlist.txt 的用户仍会被误杀。
+    allow_removed = 0
+    if allowed:
+        victims = []
+        for domain in blocked:
+            labels = domain.split(".")
+            if any(".".join(labels[i:]) in allowed for i in range(len(labels))):
+                victims.append(domain)
+        for domain in victims:
+            del blocked[domain]
+        allow_removed = len(victims)
+        log("  白名单剔除          %7d 条" % allow_removed)
+
     # 构建级免拦清单：上游误标的基础服务域（如 gw.alicdn.com）在此剔除，
     # 同时并入白名单产物，保证只订阅 allowlist 的用户也能放行。
     protect_file = ROOT / "tools" / "protected-domains.txt"
@@ -614,6 +628,7 @@ def main():
         "generated_at": now,
         "blocked_total": len(blocked),
         "allow_total": len(allowed),
+        "allow_removed": allow_removed,
         "ad_roots_added": roots_added,
         "protected_domains": sorted(protect_set),
         "protected_removed": protect_removed,
