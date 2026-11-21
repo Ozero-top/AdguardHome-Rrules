@@ -357,6 +357,7 @@ def main():
 
     sources = config["sources"]
     whitelist_sources = config.get("whitelist", [])
+    priorities = config.get("source_priority", {})
 
     # 后缀校验与聚合都依赖 PSL；热度表只用于聚合护栏，失败不影响构建
     load_psl(args.offline)
@@ -391,6 +392,8 @@ def main():
             entry = blocked.setdefault(domain, {"categories": set(), "sources": set()})
             entry["categories"].update(item["categories"])
             entry["sources"].add(item["id"])
+            # 源可信度：预算截断时优先保留高可信来源的域名
+            entry["priority"] = max(entry.get("priority", 0), int(priorities.get(item["id"], 0)))
         for domain in allows:
             allowed.setdefault(domain, set()).add(item["name"])
         source_stats[item["id"]] = {
@@ -553,7 +556,8 @@ def main():
             labels = blocked[domain]["categories"]
             for name in order:
                 if name in labels:
-                    buckets[name].append((domain, len(blocked[domain]["sources"]), domain in pinned))
+                    buckets[name].append((domain, blocked[domain].get("priority", 0),
+                                          len(blocked[domain]["sources"]), domain in pinned))
                     break
         meta_files = {}
         meta_dropped = {}
@@ -562,11 +566,12 @@ def main():
             limit = tier_budget.get(name)
             dropped = 0
             if limit and len(items) > limit:
-                # 手工清单优先，其次被更多上游同时收录的域名更可靠
-                items.sort(key=lambda pair: (0 if pair[2] else 1, -pair[1], pair[0]))
+                # 手工清单优先，其次源可信度、被更多上游同时收录，最后按域名稳定排序。
+                # 只用源数排序会让低预算档按字母序随机切掉高价值域名（如恶意软件清单）。
+                items.sort(key=lambda pair: (0 if pair[3] else 1, -pair[1], -pair[2], pair[0]))
                 dropped = len(items) - limit
                 items = items[:limit]
-            domains = sorted(domain for domain, _count, _pinned in items)
+            domains = sorted(domain for domain, _p, _count, _pinned in items)
             info = categories.get(name, {})
             write_rule_file(
                 out / str(tier) / ("%s.txt" % name),

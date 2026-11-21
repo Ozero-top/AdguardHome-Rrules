@@ -290,7 +290,7 @@ min_sources = 3
 "1024" = ["security", "chinese", "tracking", "ads"]
 "2048" = ["security", "chinese", "tracking", "ads", "annoyances"]
 
-# 各档单分类条数预算：超出时按「被更多上游收录」优先保留，再按域名排序截断
+# 各档单分类条数预算：超出时按「源可信度 → 被更多上游收录 → 域名」排序截断
 # 经验值：AdGuard Home 每条约占 100~200 字节内存，512MB 设备建议总量 15 万以内
 [budgets."512"]
 security = 15000
@@ -302,6 +302,37 @@ security = 15000
 chinese = 120000
 tracking = 8000
 ads = 120000
+
+# 源可信度：预算截断时数值大的源优先保留，未列出的源按 0 处理。
+# 只影响 512MB/1GB 档「留谁」，不改变各档总条数与内存占用；2048 档不截断。
+# 排序理由：官方/专项精编清单优先于大型聚合清单，避免恶意软件域名被字母序随机切掉。
+[source_priority]
+hostlist-malware = 100
+hostlist-tracking = 95
+adg-chinese = 90
+adg-base = 90
+adg-dnsfilter = 90
+hostlist-dns = 90
+antiad = 85
+adg-spyware = 80
+hagezi-pro = 80
+hostlist-adaway = 70
+awavenue = 70
+easyprivacy = 70
+hagezi-tif-mini = 65
+goodbye-ads-dns = 60
+goodbye-ads-domain = 60
+easylist = 55
+oisd-big = 55
+adrules-dns = 50
+xinggsf = 50
+hagezi-pro-mini = 50
+home-dns-adblock = 40
+heidai-filters = 40
+heidai-filters-lite = 35
+my-ads-rule = 30
+shadowrocket-startup-ad = 20
+adg-mobile = 20
 
 # ---------------- 分类显示名 ----------------
 [categories.security]

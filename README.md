@@ -59,7 +59,7 @@ https://cdn.jsdelivr.net/gh/Ozero-top/AdguardHome-Rrules@dist/manual/nsfw.txt
 | 2048（2GB 及以上） | security 13090、chinese 244153、tracking 1841、ads 282438、annoyances 346 | 541,868 |
 
 - 同一档位内各分类文件互不重复：一条域名只归属档内优先级最高的分类。
-- 超出单类预算时，按「被更多上游同时收录」的次数优先保留，再按域名排序截断；截断数量写入 `meta.json`。
+- 超出单类预算时，按「源可信度（`[source_priority]`）→ 被更多上游同时收录 → 域名」排序截断；截断数量写入 `meta.json`。
 - 白名单单独发布为 `allowlist.txt`，三档共用，优先级高于所有拦截规则。
 - 上游误标的域名写进 `tools/protected-domains.txt`：构建时从所有分类文件剔除（含子域），并并入 `allowlist.txt`。例如 `gw.alicdn.com`（阿里系 App 静态资源 CDN，拦掉会导致闲鱼图片空白）。
 - 成人内容单独发布为 `manual/nsfw.txt`，不进入任何档位，需手动订阅。
