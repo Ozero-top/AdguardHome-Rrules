@@ -54,9 +54,9 @@ https://cdn.jsdelivr.net/gh/Ozero-top/AdguardHome-Rrules@dist/manual/nsfw.txt
 
 | 档位 | 分类文件 | 实测条数 |
 |---|---|---|
-| 512（512MB 内存） | security 13090、chinese 60000、ads 60000 | 133,090 |
-| 1024（1GB 内存） | security 13090、chinese 120000、tracking 1841、ads 120000 | 254,931 |
-| 2048（2GB 及以上） | security 13090、chinese 244153、tracking 1841、ads 282438、annoyances 346 | 541,868 |
+| 512（512MB 内存） | security 15000、chinese 60000、ads 60000 | 135,000 |
+| 1024（1GB 内存） | security 15000、chinese 120000、tracking 8000、ads 89653 | 232,653 |
+| 2048（2GB 及以上） | security 236414、chinese 217140、tracking 56122、ads 89653、annoyances 341 | 599,670 |
 
 - 同一档位内各分类文件互不重复：一条域名只归属档内优先级最高的分类。
 - 超出单类预算时，按「源可信度（`[source_priority]`）→ 被更多上游同时收录 → 域名」排序截断；截断数量写入 `meta.json`。
