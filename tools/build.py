@@ -441,17 +441,28 @@ def main():
         log("  手工广告根域        %7d 条（新增 %d）" % (len(roots), roots_added))
 
     # 国内平台自有广告子域：通用列表覆盖不到 B 站、微博、抖音等平台的广告子域
+    # 文件内可用 "!category ads" 切换后续条目的归属分类
     platform_file = ROOT / "tools" / "cn-platform-ads.txt"
     platform_added = 0
     if platform_file.exists():
-        platform_domains, _ = parse_source(platform_file.read_text(encoding="utf-8"))
-        for domain in platform_domains:
-            entry = blocked.setdefault(domain, {"categories": set(), "sources": set()})
-            if "chinese" not in entry["categories"]:
-                entry["categories"].add("chinese")
+        cat = "chinese"
+        platform_domains = []
+        for raw_line in platform_file.read_text(encoding="utf-8").splitlines():
+            line = raw_line.strip()
+            if line.startswith("!category"):
+                parts = line.split(None, 1)
+                if len(parts) > 1:
+                    cat = parts[1].strip()
+                continue
+            if not line or line.startswith("!") or line.startswith("#"):
+                continue
+            entry = blocked.setdefault(line, {"categories": set(), "sources": set()})
+            if cat not in entry["categories"]:
+                entry["categories"].add(cat)
                 platform_added += 1
             entry["sources"].add("cn-platform-ads")
-            pinned.add(domain)
+            pinned.add(line)
+            platform_domains.append(line)
         log("  国内平台广告子域    %7d 条（新增 %d）" % (len(platform_domains), platform_added))
 
     # 子域聚合：把同一根域下大量广告子域收敛为整域规则，覆盖平台临时新增的子域。
