@@ -422,6 +422,9 @@ def main():
             "effective_rate": round(len(merged) / max(1, data["text"].count("\n") + 1), 4),
         }
 
+    # 手工维护的清单在预算截断时必须保留，否则会被上游大列表挤掉
+    pinned = set()
+
     # 手工维护的广告根域：上游只收具体子域，动态子域会漏，用这份清单做根域兜底。
     # 不做自动根域聚合，否则会误杀 *.com.br、*.vercel.app 这类公共/托管域。
     roots_file = ROOT / "tools" / "ad-roots.txt"
@@ -434,7 +437,22 @@ def main():
                 entry["categories"].add("ads")
                 roots_added += 1
             entry["sources"].add("ad-roots")
+            pinned.add(domain)
         log("  手工广告根域        %7d 条（新增 %d）" % (len(roots), roots_added))
+
+    # 国内平台自有广告子域：通用列表覆盖不到 B 站、微博、抖音等平台的广告子域
+    platform_file = ROOT / "tools" / "cn-platform-ads.txt"
+    platform_added = 0
+    if platform_file.exists():
+        platform_domains, _ = parse_source(platform_file.read_text(encoding="utf-8"))
+        for domain in platform_domains:
+            entry = blocked.setdefault(domain, {"categories": set(), "sources": set()})
+            if "chinese" not in entry["categories"]:
+                entry["categories"].add("chinese")
+                platform_added += 1
+            entry["sources"].add("cn-platform-ads")
+            pinned.add(domain)
+        log("  国内平台广告子域    %7d 条（新增 %d）" % (len(platform_domains), platform_added))
 
     # 子域聚合：把同一根域下大量广告子域收敛为整域规则，覆盖平台临时新增的子域。
     # 默认只产出候选清单——自动并集会误杀 americanexpress.co.uk、ricoh.ch 这类
@@ -524,7 +542,7 @@ def main():
             labels = blocked[domain]["categories"]
             for name in order:
                 if name in labels:
-                    buckets[name].append((domain, len(blocked[domain]["sources"])))
+                    buckets[name].append((domain, len(blocked[domain]["sources"]), domain in pinned))
                     break
         meta_files = {}
         meta_dropped = {}
@@ -533,11 +551,11 @@ def main():
             limit = tier_budget.get(name)
             dropped = 0
             if limit and len(items) > limit:
-                # 被更多上游同时收录的域名更可靠，优先保留
-                items.sort(key=lambda pair: (-pair[1], pair[0]))
+                # 手工清单优先，其次被更多上游同时收录的域名更可靠
+                items.sort(key=lambda pair: (0 if pair[2] else 1, -pair[1], pair[0]))
                 dropped = len(items) - limit
                 items = items[:limit]
-            domains = sorted(domain for domain, _count in items)
+            domains = sorted(domain for domain, _count, _pinned in items)
             info = categories.get(name, {})
             write_rule_file(
                 out / str(tier) / ("%s.txt" % name),

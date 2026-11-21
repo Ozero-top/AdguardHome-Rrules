@@ -154,6 +154,24 @@ categories = ["security"]
 license = "GPL-3.0"
 homepage = "https://github.com/AdguardTeam/HostlistsRegistry"
 
+# HaGeZi TIF：威胁情报源合并（僵尸网络、钓鱼、恶意下载），补足安全防护覆盖面
+[[sources]]
+id = "hagezi-tif-mini"
+name = "HaGeZi Threat Intelligence Feeds Mini"
+url = "https://raw.githubusercontent.com/hagezi/dns-blocklists/main/adblock/tif.mini.txt"
+categories = ["security"]
+license = "GPL-3.0"
+homepage = "https://github.com/hagezi/dns-blocklists"
+
+# HaGeZi Multi Pro Mini：广告 + 跟踪综合源，补足独立跟踪源的覆盖面
+[[sources]]
+id = "hagezi-pro-mini"
+name = "HaGeZi Multi Pro Mini"
+url = "https://raw.githubusercontent.com/hagezi/dns-blocklists/main/adblock/pro.mini.txt"
+categories = ["tracking"]
+license = "GPL-3.0"
+homepage = "https://github.com/hagezi/dns-blocklists"
+
 # 第三方中文与综合源
 [[sources]]
 id = "adrules-dns"

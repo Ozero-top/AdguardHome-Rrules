@@ -1,0 +1,36 @@
+# 国内平台自有广告与埋点子域
+# 上游通用列表通常只收 ad.xxx / track.xxx 这类通用域，平台自有子域长期缺失。
+# 只收确定属于广告/埋点、且不影响登录与核心接口的域名；此处条目在预算截断时优先保留。
+
+# 哔哩哔哩：广告投放、曝光上报、播放日志
+ad.bilibili.com
+cm.bilibili.com
+tracker.bilibili.com
+log.bilibili.com
+data.bilibili.com
+
+# 微博 / 新浪：广告位与广告统计
+ads.weibo.com
+ad.weibo.com
+sax.sina.com.cn
+beacon.sina.com.cn
+
+# 抖音 / 字节：贴片与小说广告素材、广告上报
+p6-ad.douyinpic.com
+v6-ad.douyinpic.com
+p3-ad-sign.byteimg.com
+p6-novel-sign.byteimg.com
+ads5-normal-lq.zijieapi.com
+log.zijieapi.com
+mon.snssdk.com
+
+# 淘宝 / 微信：广告点击统计、朋友圈广告上报
+t-adashx.ut.taobao.com
+shreport.weixin.qq.com
+
+# 运营商电视盒子广告与设备上报
+bdrm.bdy.lnyun.com.cn
+pdm.tydevice.com
+
+# 小米：广告追踪
+tracker.ai.xiaomi.com
