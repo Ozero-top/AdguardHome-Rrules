@@ -56,8 +56,8 @@ https://cdn.jsdelivr.net/gh/Ozero-top/AdguardHome-Rrules@dist/manual/nsfw.txt
 | 档位 | 分类文件 | 实测条数 |
 |---|---|---|
 | 512（512MB 内存） | security 15000、chinese 60000、ads 60000 | 135,000 |
-| 1024（1GB 内存） | security 15000、chinese 120000、tracking 8000、ads 90903 | 233,903 |
-| 2048（2GB 及以上） | security 259770、chinese 213514、tracking 55547、ads 90903、annoyances 342、intl 3588 | 623,664 |
+| 1024（1GB 内存） | security 15000、chinese 120000、tracking 8000、ads 90512 | 233,512 |
+| 2048（2GB 及以上） | security 211594、chinese 216857、tracking 55565、ads 90512、annoyances 342、intl 3613 | 578,483 |
 
 - `intl`（外语/地区专项）只进 2048 档：来自 AdGuard for Android 预置的语言分区清单，只收录实测能抽出新增域名的 30 条，512MB/1GB 设备内存占用不受影响。
 
