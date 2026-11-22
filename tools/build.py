@@ -563,6 +563,26 @@ def main():
             allowed.setdefault(domain, set()).add("protected-domains")
         log("  免拦清单            %7d 条（剔除 %d）" % (len(protect_set), protect_removed))
 
+    # 强制拦截清单：优先级高于白名单。上游黑名单源里的 @@ 例外会被提取成全局白名单，
+    # 这里列出的域名从白名单移除并强制归入 ads，避免广告/遥测端点被整体放行。
+    force_file = ROOT / "tools" / "force-block.txt"
+    force_set = set()
+    force_overrode = 0
+    if force_file.exists():
+        force_set, _ = parse_source(force_file.read_text(encoding="utf-8"))
+        for domain in force_set:
+            if domain in allowed:
+                allowed.pop(domain)
+                force_overrode += 1
+            entry = blocked.get(domain)
+            if entry is None:
+                blocked[domain] = {"categories": {"ads"}, "sources": {"force-block"}}
+            else:
+                entry["categories"] = set(entry["categories"]) | {"ads"}
+                entry["sources"] = set(entry["sources"]) | {"force-block"}
+            pinned.add(domain)
+        log("  强制拦截清单        %7d 条（覆盖白名单 %d）" % (len(force_set), force_overrode))
+
     # 分档：一条规则在档内只归一个分类，按 tiers 顺序取第一个命中
     tiers = config["tiers"]
     budgets = config.get("budgets", {})
@@ -638,6 +658,8 @@ def main():
         "ad_roots_added": roots_added,
         "protected_domains": sorted(protect_set),
         "protected_removed": protect_removed,
+        "force_block_domains": sorted(force_set),
+        "force_block_overrode": force_overrode,
         "agg_roots_added": len(agg_roots),
         "agg_candidates_total": len(agg_candidates),
         "agg_candidates_sample": [item[0] for item in agg_candidates[:50]],

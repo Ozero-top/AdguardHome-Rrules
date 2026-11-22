@@ -65,6 +65,7 @@ https://cdn.jsdelivr.net/gh/Ozero-top/AdguardHome-Rrules@dist/manual/nsfw.txt
 - 超出单类预算时，按「源可信度（`[source_priority]`）→ 被更多上游同时收录 → 域名」排序截断；截断数量写入 `meta.json`。
 - 白名单单独发布为 `allowlist.txt`，三档共用，优先级高于所有拦截规则；构建时白名单域名及其子域会从所有分类文件剔除，只订分类文件也不会误杀。
 - 上游误标的域名写进 `tools/protected-domains.txt`：构建时从所有分类文件剔除（含子域），并并入 `allowlist.txt`。例如 `gw.alicdn.com`（阿里系 App 静态资源 CDN，拦掉会导致闲鱼图片空白）。
+- 上游黑名单源里的 `@@` 例外会被提取成全局白名单，个别广告/遥测域名因此被整体放行。需要强制拦截的域名写进 `tools/force-block.txt`：构建时从白名单移除并强制归入 `ads`，例如 `ads.pinterest.com`、`metrics.icloud.com`。
 - 成人内容单独发布为 `manual/nsfw.txt`，不进入任何档位，需手动订阅。
 - 公共后缀（`com.cn`、`github.io` 等，按 Public Suffix List 判定）不会被写成拦截规则，避免整片站点被误杀。
 - 子域聚合每次构建输出 `build/agg-candidates.txt`：同一根域下 ≥10 个广告子域、且每个至少被 3 个源收录的根域。自动并入默认关闭，实测候选中会出现 americanexpress.co.uk、ricoh.ch 这类有真实主站的域名；确认无误后把根域写进 `tools/ad-roots.txt` 即可并入 `ads`。

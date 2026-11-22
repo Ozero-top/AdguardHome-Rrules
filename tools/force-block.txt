@@ -1,0 +1,18 @@
+# 构建级强制拦截清单（优先级高于白名单）
+#
+# 用途：上游黑名单源里的 @@ 例外会被提取成全局白名单（如 anti-AD 的
+# @@||ads.pinterest.com^、@@||metrics.icloud.com^），导致这些广告/遥测域名
+# 既不拦截也不出现在分类文件里。这里列出的域名会从白名单移除，并强制加入 ads。
+#
+# 收录标准：
+#   1. 域名本身是广告、统计或遥测端点，被至少一个拦截源收录；
+#   2. 只写具体主机名，不写根域，避免连带拦掉正常业务；
+#   3. 每次新增请附一行注释说明依据。
+
+# Pinterest 广告接口：hostlist-tracking、hagezi、oisd、AdRules、AWAvenue 均拦截，
+# 被 anti-AD（裸例外）与 EasyList（$popup）放行。
+ads.pinterest.com
+
+# Apple 遥测上报：hostlist-tracking 拦截，被 anti-AD 裸例外放行。
+# 注意：个别环境反馈会影响 iCloud 状态同步，如有异常请从这里移除。
+metrics.icloud.com
