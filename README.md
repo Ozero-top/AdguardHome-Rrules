@@ -38,6 +38,7 @@ https://cdn.jsdelivr.net/gh/Ozero-top/AdguardHome-Rrules@dist/2048/chinese.txt
 https://cdn.jsdelivr.net/gh/Ozero-top/AdguardHome-Rrules@dist/2048/tracking.txt
 https://cdn.jsdelivr.net/gh/Ozero-top/AdguardHome-Rrules@dist/2048/ads.txt
 https://cdn.jsdelivr.net/gh/Ozero-top/AdguardHome-Rrules@dist/2048/annoyances.txt
+https://cdn.jsdelivr.net/gh/Ozero-top/AdguardHome-Rrules@dist/2048/intl.txt
 ```
 
 ### 可选
@@ -55,8 +56,10 @@ https://cdn.jsdelivr.net/gh/Ozero-top/AdguardHome-Rrules@dist/manual/nsfw.txt
 | 档位 | 分类文件 | 实测条数 |
 |---|---|---|
 | 512（512MB 内存） | security 15000、chinese 60000、ads 60000 | 135,000 |
-| 1024（1GB 内存） | security 15000、chinese 120000、tracking 8000、ads 89653 | 232,653 |
-| 2048（2GB 及以上） | security 236414、chinese 217140、tracking 56122、ads 89653、annoyances 341 | 599,670 |
+| 1024（1GB 内存） | security 15000、chinese 120000、tracking 8000、ads 89851 | 232,851 |
+| 2048（2GB 及以上） | security 236404、chinese 217084、tracking 56104、ads 89851、annoyances 340、intl 3598 | 603,381 |
+
+- `intl`（外语/地区专项）只进 2048 档：来自 AdGuard for Android 预置的语言分区清单，只收录实测能抽出新增域名的 30 条，512MB/1GB 设备内存占用不受影响。
 
 - 同一档位内各分类文件互不重复：一条域名只归属档内优先级最高的分类。
 - 超出单类预算时，按「源可信度（`[source_priority]`）→ 被更多上游同时收录 → 域名」排序截断；截断数量写入 `meta.json`。
@@ -92,7 +95,7 @@ python tools/verify.py --out build
 build/
 ├── 512/{security,chinese,ads}.txt
 ├── 1024/{security,chinese,tracking,ads}.txt
-├── 2048/{security,chinese,tracking,ads,annoyances}.txt
+├── 2048/{security,chinese,tracking,ads,annoyances,intl}.txt
 ├── allowlist.txt
 ├── manual/nsfw.txt
 ├── agg-candidates.txt

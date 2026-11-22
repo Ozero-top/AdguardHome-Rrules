@@ -263,6 +263,249 @@ tier = "manual"
 license = "见上游仓库"
 homepage = "https://github.com/hagezi/dns-blocklists"
 
+# ---------------- 外语/地区专项（仅 2048 档） ----------------
+# 来自 AdGuard for Android 预置的语言分区清单，只保留实测能抽出新增域名的源。
+# 这些源多为 URL/元素级规则，DNS 收益有限，因此单独成类、只进 2048 档，不影响 512MB/1GB 设备内存。
+[[sources]]
+id = "reg-1-ru"
+name = "AdGuard Russian filter"
+url = "https://filters.adtidy.org/android/filters/1_optimized.txt"
+categories = ["intl"]
+license = "见上游仓库"
+homepage = "https://github.com/AdguardTeam/FiltersRegistry"
+
+[[sources]]
+id = "reg-6-de"
+name = "AdGuard German filter"
+url = "https://filters.adtidy.org/android/filters/6_optimized.txt"
+categories = ["intl"]
+license = "见上游仓库"
+homepage = "https://github.com/AdguardTeam/FiltersRegistry"
+
+[[sources]]
+id = "reg-7-ja"
+name = "AdGuard Japanese filter"
+url = "https://filters.adtidy.org/android/filters/7_optimized.txt"
+categories = ["intl"]
+license = "见上游仓库"
+homepage = "https://github.com/AdguardTeam/FiltersRegistry"
+
+[[sources]]
+id = "reg-8-nl"
+name = "AdGuard Dutch filter"
+url = "https://filters.adtidy.org/android/filters/8_optimized.txt"
+categories = ["intl"]
+license = "见上游仓库"
+homepage = "https://github.com/AdguardTeam/FiltersRegistry"
+
+[[sources]]
+id = "reg-9-es"
+name = "AdGuard Spanish/Portuguese filter"
+url = "https://filters.adtidy.org/android/filters/9_optimized.txt"
+categories = ["intl"]
+license = "见上游仓库"
+homepage = "https://github.com/AdguardTeam/FiltersRegistry"
+
+[[sources]]
+id = "reg-16-fr"
+name = "AdGuard French filter"
+url = "https://filters.adtidy.org/android/filters/16_optimized.txt"
+categories = ["intl"]
+license = "见上游仓库"
+homepage = "https://github.com/AdguardTeam/FiltersRegistry"
+
+[[sources]]
+id = "reg-23-uk"
+name = "AdGuard Ukrainian filter"
+url = "https://filters.adtidy.org/android/filters/23_optimized.txt"
+categories = ["intl"]
+license = "见上游仓库"
+homepage = "https://github.com/AdguardTeam/FiltersRegistry"
+
+[[sources]]
+id = "reg-102-id"
+name = "ABPindo"
+url = "https://raw.githubusercontent.com/ABPindo/indonesianadblockrules/master/subscriptions/abpindo.txt"
+categories = ["intl"]
+license = "见上游仓库"
+homepage = "https://github.com/ABPindo/indonesianadblockrules"
+
+[[sources]]
+id = "reg-105-cs"
+name = "EasyList Czech and Slovak"
+url = "https://raw.githubusercontent.com/tomasko126/easylistczechandslovak/master/filters.txt"
+categories = ["intl"]
+license = "见上游仓库"
+homepage = "https://github.com/tomasko126/easylistczechandslovak"
+
+[[sources]]
+id = "reg-106-nl"
+name = "EasyList Dutch"
+url = "https://easylist-downloads.adblockplus.org/easylistdutch.txt"
+categories = ["intl"]
+license = "见上游仓库"
+homepage = "https://easylist.to/"
+
+[[sources]]
+id = "reg-107-de"
+name = "EasyList Germany"
+url = "https://easylist.to/easylistgermany/easylistgermany.txt"
+categories = ["intl"]
+license = "见上游仓库"
+homepage = "https://easylist.to/"
+
+[[sources]]
+id = "reg-111-lv"
+name = "Latvian List"
+url = "https://raw.githubusercontent.com/Latvian-List/adblock-latvian/master/lists/latvian-list.txt"
+categories = ["intl"]
+license = "见上游仓库"
+homepage = "https://github.com/Latvian-List/adblock-latvian"
+
+[[sources]]
+id = "reg-113-fr"
+name = "Liste FR"
+url = "https://easylist-downloads.adblockplus.org/liste_fr.txt"
+categories = ["intl"]
+license = "见上游仓库"
+homepage = "https://easylist.to/"
+
+[[sources]]
+id = "reg-114-ro"
+name = "ROList"
+url = "https://www.zoso.ro/pages/rolist.txt"
+categories = ["intl"]
+license = "见上游仓库"
+homepage = "https://www.zoso.ro"
+
+[[sources]]
+id = "reg-121-el"
+name = "Greek AdBlock Filter"
+url = "https://www.void.gr/kargig/void-gr-filters.txt"
+categories = ["intl"]
+license = "见上游仓库"
+homepage = "https://www.void.gr"
+
+[[sources]]
+id = "reg-124-pt"
+name = "EasyList Portuguese"
+url = "https://easylist-downloads.adblockplus.org/easylistportuguese.txt"
+categories = ["intl"]
+license = "见上游仓库"
+homepage = "https://easylist.to/"
+
+[[sources]]
+id = "reg-202-th"
+name = "EasyList Thailand"
+url = "https://raw.githubusercontent.com/easylist-thailand/easylist-thailand/master/subscription/easylist-thailand.txt"
+categories = ["intl"]
+license = "见上游仓库"
+homepage = "https://github.com/easylist-thailand/easylist-thailand"
+
+[[sources]]
+id = "reg-203-hu"
+name = "Hungarian filter"
+url = "https://filters.hufilter.hu/hufilter-adguard.txt"
+categories = ["intl"]
+license = "见上游仓库"
+homepage = "https://filters.hufilter.hu"
+
+[[sources]]
+id = "reg-206-it"
+name = "Xfiles"
+url = "https://raw.githubusercontent.com/gioxx/xfiles/master/filtri.txt"
+categories = ["intl"]
+license = "见上游仓库"
+homepage = "https://github.com/gioxx/xfiles"
+
+[[sources]]
+id = "reg-212-ru"
+name = "RU AdList: Counters"
+url = "https://easylist-downloads.adblockplus.org/cntblock.txt"
+categories = ["intl"]
+license = "见上游仓库"
+homepage = "https://easylist.to/"
+
+[[sources]]
+id = "reg-214-vi"
+name = "ABPVN List"
+url = "https://raw.githubusercontent.com/abpvn/abpvn/master/filter/abpvn_adguard.txt"
+categories = ["intl"]
+license = "见上游仓库"
+homepage = "https://github.com/abpvn/abpvn"
+
+[[sources]]
+id = "reg-216-pl"
+name = "Official Polish filters for AdBlock, uBlock Origin & AdGuard"
+url = "https://raw.githubusercontent.com/MajkiIT/polish-ads-filter/master/polish-adblock-filters/adblock.txt"
+categories = ["intl"]
+license = "见上游仓库"
+homepage = "https://github.com/MajkiIT/polish-ads-filter"
+
+[[sources]]
+id = "reg-218-et"
+name = "Estonian List"
+url = "https://ubo-et.lepik.io/list.txt"
+categories = ["intl"]
+license = "见上游仓库"
+homepage = "https://ubo-et.lepik.io"
+
+[[sources]]
+id = "reg-227-ko"
+name = "List-KR Classic filter list"
+url = "https://cdn.jsdelivr.net/npm/@list-kr/filterslists@latest/dist/filterslist-AdGuard-classic.txt"
+categories = ["intl"]
+license = "见上游仓库"
+homepage = "https://github.com/List-KR/filterslists"
+
+[[sources]]
+id = "reg-231-es"
+name = "EasyList Spanish"
+url = "https://easylist-downloads.adblockplus.org/easylistspanish.txt"
+categories = ["intl"]
+license = "见上游仓库"
+homepage = "https://easylist.to/"
+
+[[sources]]
+id = "reg-236-ro"
+name = "road-block light"
+url = "https://raw.githubusercontent.com/tcptomato/ROad-Block/master/road-block-filters-light.txt"
+categories = ["intl"]
+license = "见上游仓库"
+homepage = "https://github.com/tcptomato/ROad-Block"
+
+[[sources]]
+id = "reg-243-sv"
+name = "Frellwit's Swedish Filter"
+url = "https://raw.githubusercontent.com/lassekongo83/Frellwits-filter-lists/master/Frellwits-Swedish-Filter.txt"
+categories = ["intl"]
+license = "见上游仓库"
+homepage = "https://github.com/lassekongo83/Frellwits-filter-lists"
+
+[[sources]]
+id = "reg-244-ko"
+name = "YousList"
+url = "https://raw.githubusercontent.com/yous/YousList/master/youslist.txt"
+categories = ["intl"]
+license = "见上游仓库"
+homepage = "https://github.com/yous/YousList"
+
+[[sources]]
+id = "reg-246-pl"
+name = "EasyList Polish"
+url = "https://easylist-downloads.adblockplus.org/easylistpolish.txt"
+categories = ["intl"]
+license = "见上游仓库"
+homepage = "https://easylist.to/"
+
+[[sources]]
+id = "reg-254-mk"
+name = "Macedonian adBlock Filters"
+url = "https://raw.githubusercontent.com/RandomAdversary/Macedonian-adBlock-Filters/master/Filters"
+categories = ["intl"]
+license = "见上游仓库"
+homepage = "https://github.com/RandomAdversary/Macedonian-adBlock-Filters"
+
 # ---------------- 白名单来源（三档共用） ----------------
 [[whitelist]]
 id = "goodbye-allow"
@@ -288,7 +531,7 @@ min_sources = 3
 [tiers]
 "512" = ["security", "chinese", "ads"]
 "1024" = ["security", "chinese", "tracking", "ads"]
-"2048" = ["security", "chinese", "tracking", "ads", "annoyances"]
+"2048" = ["security", "chinese", "tracking", "ads", "annoyances", "intl"]
 
 # 各档单分类条数预算：超出时按「源可信度 → 被更多上游收录 → 域名」排序截断
 # 经验值：AdGuard Home 每条约占 100~200 字节内存，512MB 设备建议总量 15 万以内
@@ -358,6 +601,10 @@ desc = "弹窗、Cookie 提示、移动横幅、应用推荐"
 [categories.adult]
 title = "成人内容"
 desc = "仅在你主动开启时使用，不进入任何档位"
+
+[categories.intl]
+title = "外语/地区专项"
+desc = "非中文地区的语言分区广告与统计域名，仅 2048 档提供"
 
 [categories.misc]
 title = "未分类"

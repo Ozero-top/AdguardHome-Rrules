@@ -45,6 +45,7 @@ AGG_RANK_LIMIT = 1000000   # Tranco 前 100 万内的根域不聚合（避免误
 _PSL_EXACT = set()
 _PSL_WILD = set()
 _PSL_EXC = set()
+_TLD = set()
 _TRANCO = None
 
 
@@ -149,6 +150,8 @@ def load_psl(offline=False):
         else:
             exact.add(text.lower())
     _PSL_EXACT, _PSL_WILD, _PSL_EXC = exact, wild, exceptions
+    # 取所有条目最后一段得到有效顶级域集合，用于过滤 `468x60.h`、`xxx.js` 这类误抽的伪域名
+    _TLD = {entry.rsplit(".", 1)[-1] for entry in exact | wild | exceptions if entry}
     log("  公共后缀规则        %7d 条" % (len(exact) + len(wild) + len(exceptions)))
     return True
 
@@ -221,6 +224,9 @@ def normalize_domain(raw):
     if len(name) > 253 or not DOMAIN.match(name):
         return None
     if name.rsplit(".", 1)[-1] in ("local", "localhost", "invalid", "test"):
+        return None
+    # 顶级域不在 IANA/PSL 列表内，说明是从 URL 或元素规则里误抽出来的伪域名
+    if _TLD and name.rsplit(".", 1)[-1] not in _TLD:
         return None
     # 公共后缀本身（com.cn、github.io）不能当拦截规则，否则整片站点被误杀
     if is_public_suffix(name):
