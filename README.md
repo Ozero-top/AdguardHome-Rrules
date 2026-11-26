@@ -1,6 +1,6 @@
 # adguardhome-rules
 
-给 [AdGuard Home 助手（luci-app-adguardhome-lite）](https://github.com/Ozero-top/luci-app-adguardhome-lite) 用的规则构建仓库：每 7 天自动抓取上游规则，归一化、去重、分类，按设备内存分档生成静态规则文件，发布到 `dist` 分支。
+给 [AdGuard Home 管理中心（luci-app-adguardhome-lite）](https://github.com/Ozero-top/luci-app-adguardhome-lite) 用的规则构建仓库：每 7 天自动抓取上游规则，归一化、去重、分类，按设备内存分档生成静态规则文件，发布到 `dist` 分支。
 
 ## 订阅地址
 
