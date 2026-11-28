@@ -1,0 +1,864 @@
+{
+  "version": "20261128",
+  "generated_at": "2026-11-28T08:59:04Z",
+  "blocked_total": 674256,
+  "allow_total": 392,
+  "allow_removed": 101,
+  "ad_roots_added": 0,
+  "protected_domains": [
+    "gw.alicdn.com"
+  ],
+  "protected_removed": 1,
+  "force_block_domains": [
+    "ads.pinterest.com",
+    "metrics.icloud.com"
+  ],
+  "force_block_overrode": 2,
+  "agg_roots_added": 0,
+  "agg_candidates_total": 50,
+  "agg_candidates_sample": [
+    "adobesandbox.com",
+    "adobevlab.com",
+    "algomoneo.com",
+    "americanexpress.co.uk",
+    "anunciojuridico.com.br",
+    "applabs.live",
+    "cabe.shop",
+    "eccocar.com",
+    "eloquademos.com",
+    "empresa-br.com",
+    "epiqnotification.com",
+    "epoise.com",
+    "goldfishss.com",
+    "groc.press",
+    "happ.social",
+    "headlines.pw",
+    "ignite.technology",
+    "informaengage.com",
+    "innovatedating.com",
+    "insights.md",
+    "lplnow.com",
+    "m-shop.me",
+    "mingle.com",
+    "offeroshop.com",
+    "olladeals.com",
+    "onofficeom.com",
+    "openapp.link",
+    "osdn.com",
+    "pamo-design.com",
+    "pandasuite.io",
+    "primeshopers.com",
+    "quantresear.ch",
+    "reformadigital.org",
+    "relationshipone.com",
+    "ricoh.ch",
+    "ricoh.fr",
+    "rottne.com",
+    "shengen.ru",
+    "siemensplmevents.com",
+    "stape.dev",
+    "tajawal.com",
+    "techdoor.com",
+    "teriflicmedia.com",
+    "topya.com",
+    "ubm-events.com",
+    "unifast.com.br",
+    "verdantpathfinder.com",
+    "verintsystemsinc.com",
+    "wingsfit1.com",
+    "zavydeals.com"
+  ],
+  "tiers": {
+    "512": {
+      "files": {
+        "security": 15000,
+        "chinese": 60000,
+        "ads": 60000
+      },
+      "total": 135000,
+      "dropped": {
+        "security": 170316,
+        "chinese": 167256,
+        "ads": 96952
+      }
+    },
+    "1024": {
+      "files": {
+        "security": 15000,
+        "chinese": 120000,
+        "tracking": 8000,
+        "ads": 101007
+      },
+      "total": 244007,
+      "dropped": {
+        "security": 170316,
+        "chinese": 107256,
+        "tracking": 49140
+      }
+    },
+    "2048": {
+      "files": {
+        "security": 185316,
+        "chinese": 227256,
+        "tracking": 57140,
+        "ads": 101007,
+        "annoyances": 347,
+        "intl": 3606
+      },
+      "total": 574672,
+      "dropped": {}
+    }
+  },
+  "sources": {
+    "adg-base": {
+      "status": "ok",
+      "url": "https://raw.githubusercontent.com/AdguardTeam/FiltersRegistry/master/filters/filter_2_Base/filter.txt",
+      "bytes": 8100345,
+      "lines": 166314,
+      "domains": 60637,
+      "allow": 27,
+      "effective_rate": 0.3646,
+      "categories": [
+        "ads"
+      ]
+    },
+    "adg-spyware": {
+      "status": "ok",
+      "url": "https://raw.githubusercontent.com/AdguardTeam/FiltersRegistry/master/filters/filter_3_Spyware/filter.txt",
+      "bytes": 16235201,
+      "lines": 471838,
+      "domains": 123630,
+      "allow": 15,
+      "effective_rate": 0.262,
+      "categories": [
+        "tracking"
+      ]
+    },
+    "hagezi-popupads": {
+      "status": "ok",
+      "url": "https://raw.githubusercontent.com/hagezi/dns-blocklists/main/adblock/popupads.txt",
+      "bytes": 1514178,
+      "lines": 71319,
+      "domains": 71305,
+      "allow": 0,
+      "effective_rate": 0.9998,
+      "categories": [
+        "annoyances"
+      ]
+    },
+    "adg-annoyances": {
+      "status": "ok",
+      "url": "https://raw.githubusercontent.com/AdguardTeam/FiltersRegistry/master/filters/filter_14_Annoyances/filter.txt",
+      "bytes": 4738624,
+      "lines": 72140,
+      "domains": 896,
+      "allow": 3,
+      "effective_rate": 0.0124,
+      "categories": [
+        "annoyances"
+      ]
+    },
+    "adg-annoy-cookies": {
+      "status": "ok",
+      "url": "https://raw.githubusercontent.com/AdguardTeam/FiltersRegistry/master/filters/filter_18_Annoyances_Cookies/filter.txt",
+      "bytes": 1796470,
+      "lines": 26091,
+      "domains": 194,
+      "allow": 2,
+      "effective_rate": 0.0074,
+      "categories": [
+        "annoyances"
+      ]
+    },
+    "adg-annoy-popups": {
+      "status": "ok",
+      "url": "https://raw.githubusercontent.com/AdguardTeam/FiltersRegistry/master/filters/filter_19_Annoyances_Popups/filter.txt",
+      "bytes": 1553832,
+      "lines": 24916,
+      "domains": 424,
+      "allow": 1,
+      "effective_rate": 0.017,
+      "categories": [
+        "annoyances"
+      ]
+    },
+    "adg-chinese": {
+      "status": "ok",
+      "url": "https://raw.githubusercontent.com/AdguardTeam/FiltersRegistry/master/filters/filter_224_Chinese/filter.txt",
+      "bytes": 757299,
+      "lines": 21919,
+      "domains": 6047,
+      "allow": 11,
+      "effective_rate": 0.2759,
+      "categories": [
+        "chinese",
+        "ads"
+      ]
+    },
+    "adg-mobile": {
+      "status": "ok",
+      "url": "https://raw.githubusercontent.com/AdguardTeam/FiltersRegistry/master/filters/filter_11_Mobile/filter.txt",
+      "bytes": 646539,
+      "lines": 10152,
+      "domains": 963,
+      "allow": 2,
+      "effective_rate": 0.0949,
+      "categories": [
+        "ads",
+        "annoyances"
+      ]
+    },
+    "adg-dnsfilter": {
+      "status": "ok",
+      "url": "https://raw.githubusercontent.com/AdguardTeam/FiltersRegistry/master/filters/filter_15_DnsFilter/filter.txt",
+      "bytes": 4985462,
+      "lines": 197553,
+      "domains": 195102,
+      "allow": 183,
+      "effective_rate": 0.9876,
+      "categories": [
+        "ads"
+      ]
+    },
+    "easylist": {
+      "status": "ok",
+      "url": "https://easylist-downloads.adblockplus.org/easylist.txt",
+      "bytes": 2087749,
+      "lines": 79444,
+      "domains": 46999,
+      "allow": 0,
+      "effective_rate": 0.5916,
+      "categories": [
+        "ads"
+      ]
+    },
+    "easyprivacy": {
+      "status": "ok",
+      "url": "https://easylist-downloads.adblockplus.org/easyprivacy.txt",
+      "bytes": 1452772,
+      "lines": 54649,
+      "domains": 44567,
+      "allow": 4,
+      "effective_rate": 0.8155,
+      "categories": [
+        "tracking"
+      ]
+    },
+    "xinggsf": {
+      "status": "ok",
+      "url": "https://raw.githubusercontent.com/xinggsf/Adblock-Plus-Rule/master/rule.txt",
+      "bytes": 28271,
+      "lines": 1249,
+      "domains": 83,
+      "allow": 1,
+      "effective_rate": 0.0665,
+      "categories": [
+        "chinese",
+        "ads"
+      ]
+    },
+    "heidai-filters": {
+      "status": "ok",
+      "url": "https://raw.githubusercontent.com/217heidai/adblockfilters/main/rules/adblockfilters.txt",
+      "bytes": 5998990,
+      "lines": 102787,
+      "domains": 595,
+      "allow": 3,
+      "effective_rate": 0.0058,
+      "categories": [
+        "ads"
+      ]
+    },
+    "heidai-filters-lite": {
+      "status": "ok",
+      "url": "https://raw.githubusercontent.com/217heidai/adblockfilters/main/rules/adblockfilterslite.txt",
+      "bytes": 3024328,
+      "lines": 43054,
+      "domains": 162,
+      "allow": 1,
+      "effective_rate": 0.0038,
+      "categories": [
+        "ads"
+      ]
+    },
+    "hostlist-dns": {
+      "status": "ok",
+      "url": "https://adguardteam.github.io/HostlistsRegistry/assets/filter_1.txt",
+      "bytes": 4725865,
+      "lines": 195912,
+      "domains": 195127,
+      "allow": 183,
+      "effective_rate": 0.996,
+      "categories": [
+        "ads"
+      ]
+    },
+    "hostlist-adaway": {
+      "status": "ok",
+      "url": "https://adguardteam.github.io/HostlistsRegistry/assets/filter_2.txt",
+      "bytes": 243130,
+      "lines": 10597,
+      "domains": 6540,
+      "allow": 0,
+      "effective_rate": 0.6172,
+      "categories": [
+        "ads"
+      ]
+    },
+    "hostlist-tracking": {
+      "status": "ok",
+      "url": "https://adguardteam.github.io/HostlistsRegistry/assets/filter_3.txt",
+      "bytes": 69655,
+      "lines": 3560,
+      "domains": 3551,
+      "allow": 0,
+      "effective_rate": 0.9975,
+      "categories": [
+        "tracking"
+      ]
+    },
+    "hostlist-malware": {
+      "status": "ok",
+      "url": "https://adguardteam.github.io/HostlistsRegistry/assets/filter_4.txt",
+      "bytes": 356246,
+      "lines": 13127,
+      "domains": 13117,
+      "allow": 0,
+      "effective_rate": 0.9992,
+      "categories": [
+        "security"
+      ]
+    },
+    "hagezi-tif-mini": {
+      "status": "ok",
+      "url": "https://raw.githubusercontent.com/hagezi/dns-blocklists/main/adblock/tif.mini.txt",
+      "bytes": 3686345,
+      "lines": 172837,
+      "domains": 172762,
+      "allow": 0,
+      "effective_rate": 0.9996,
+      "categories": [
+        "security"
+      ]
+    },
+    "hagezi-pro-mini": {
+      "status": "ok",
+      "url": "https://raw.githubusercontent.com/hagezi/dns-blocklists/main/adblock/pro.mini.txt",
+      "bytes": 2336402,
+      "lines": 95249,
+      "domains": 95185,
+      "allow": 0,
+      "effective_rate": 0.9993,
+      "categories": [
+        "tracking"
+      ]
+    },
+    "adrules-dns": {
+      "status": "ok",
+      "url": "https://raw.githubusercontent.com/Cats-Team/AdRules/main/dns.txt",
+      "bytes": 5195506,
+      "lines": 216458,
+      "domains": 216007,
+      "allow": 0,
+      "effective_rate": 0.9979,
+      "categories": [
+        "ads",
+        "chinese"
+      ]
+    },
+    "antiad": {
+      "status": "ok",
+      "url": "https://anti-ad.net/easylist.txt",
+      "bytes": 2105681,
+      "lines": 96465,
+      "domains": 96251,
+      "allow": 107,
+      "effective_rate": 0.9978,
+      "categories": [
+        "ads",
+        "chinese"
+      ]
+    },
+    "awavenue": {
+      "status": "ok",
+      "url": "https://raw.githubusercontent.com/TG-Twilight/AWAvenue-Ads-Rule/main/AWAvenue-Ads-Rule.txt",
+      "bytes": 23771,
+      "lines": 997,
+      "domains": 978,
+      "allow": 0,
+      "effective_rate": 0.9809,
+      "categories": [
+        "ads",
+        "chinese"
+      ]
+    },
+    "goodbye-ads-dns": {
+      "status": "ok",
+      "url": "https://raw.githubusercontent.com/8680/GOODBYEADS/master/data/rules/dns.txt",
+      "bytes": 2853224,
+      "lines": 122013,
+      "domains": 121759,
+      "allow": 0,
+      "effective_rate": 0.9979,
+      "categories": [
+        "ads",
+        "chinese"
+      ]
+    },
+    "goodbye-ads-domain": {
+      "status": "ok",
+      "url": "https://raw.githubusercontent.com/8680/GOODBYEADS/master/data/rules/ad-domain.txt",
+      "bytes": 2487045,
+      "lines": 122010,
+      "domains": 121759,
+      "allow": 0,
+      "effective_rate": 0.9979,
+      "categories": [
+        "ads"
+      ]
+    },
+    "oisd-big": {
+      "status": "ok",
+      "url": "https://big.oisd.nl/",
+      "bytes": 4996715,
+      "lines": 221698,
+      "domains": 221655,
+      "allow": 0,
+      "effective_rate": 0.9998,
+      "categories": [
+        "ads"
+      ]
+    },
+    "hagezi-pro": {
+      "status": "ok",
+      "url": "https://raw.githubusercontent.com/hagezi/dns-blocklists/main/adblock/pro.txt",
+      "bytes": 5550915,
+      "lines": 239097,
+      "domains": 239030,
+      "allow": 0,
+      "effective_rate": 0.9997,
+      "categories": [
+        "ads"
+      ]
+    },
+    "shadowrocket-startup-ad": {
+      "status": "ok",
+      "url": "https://raw.githubusercontent.com/jiahuawen750-pixel/shadowrocket-rules/main/startup-ad.sgmodule",
+      "bytes": 7938,
+      "lines": 288,
+      "domains": 120,
+      "allow": 0,
+      "effective_rate": 0.4167,
+      "categories": [
+        "ads",
+        "chinese"
+      ]
+    },
+    "home-dns-adblock": {
+      "status": "ok",
+      "url": "https://raw.githubusercontent.com/abclq/home-dns-adblock/main/dist/adguard-dns-full.txt",
+      "bytes": 24991,
+      "lines": 1029,
+      "domains": 1019,
+      "allow": 0,
+      "effective_rate": 0.9903,
+      "categories": [
+        "ads",
+        "chinese"
+      ]
+    },
+    "my-ads-rule": {
+      "status": "ok",
+      "url": "https://raw.githubusercontent.com/DickaHandsome/My-Ads-Rule/main/MyRule.txt",
+      "bytes": 9500,
+      "lines": 496,
+      "domains": 474,
+      "allow": 0,
+      "effective_rate": 0.9556,
+      "categories": [
+        "ads"
+      ]
+    },
+    "hagezi-nsfw": {
+      "status": "ok",
+      "url": "https://raw.githubusercontent.com/hagezi/dns-blocklists/main/adblock/nsfw.txt",
+      "bytes": 1920290,
+      "lines": 100142,
+      "domains": 100128,
+      "allow": 0,
+      "effective_rate": 0.9999,
+      "categories": [
+        "adult"
+      ]
+    },
+    "reg-1-ru": {
+      "status": "ok",
+      "url": "https://filters.adtidy.org/android/filters/1_optimized.txt",
+      "bytes": 363146,
+      "lines": 6969,
+      "domains": 995,
+      "allow": 2,
+      "effective_rate": 0.1428,
+      "categories": [
+        "intl"
+      ]
+    },
+    "reg-6-de": {
+      "status": "ok",
+      "url": "https://filters.adtidy.org/android/filters/6_optimized.txt",
+      "bytes": 297578,
+      "lines": 5156,
+      "domains": 195,
+      "allow": 8,
+      "effective_rate": 0.0378,
+      "categories": [
+        "intl"
+      ]
+    },
+    "reg-7-ja": {
+      "status": "ok",
+      "url": "https://filters.adtidy.org/android/filters/7_optimized.txt",
+      "bytes": 742164,
+      "lines": 12441,
+      "domains": 369,
+      "allow": 0,
+      "effective_rate": 0.0297,
+      "categories": [
+        "intl"
+      ]
+    },
+    "reg-8-nl": {
+      "status": "ok",
+      "url": "https://filters.adtidy.org/android/filters/8_optimized.txt",
+      "bytes": 95676,
+      "lines": 1998,
+      "domains": 71,
+      "allow": 1,
+      "effective_rate": 0.0355,
+      "categories": [
+        "intl"
+      ]
+    },
+    "reg-9-es": {
+      "status": "ok",
+      "url": "https://filters.adtidy.org/android/filters/9_optimized.txt",
+      "bytes": 335526,
+      "lines": 5821,
+      "domains": 178,
+      "allow": 0,
+      "effective_rate": 0.0306,
+      "categories": [
+        "intl"
+      ]
+    },
+    "reg-16-fr": {
+      "status": "ok",
+      "url": "https://filters.adtidy.org/android/filters/16_optimized.txt",
+      "bytes": 235116,
+      "lines": 5208,
+      "domains": 1346,
+      "allow": 3,
+      "effective_rate": 0.2584,
+      "categories": [
+        "intl"
+      ]
+    },
+    "reg-23-uk": {
+      "status": "ok",
+      "url": "https://filters.adtidy.org/android/filters/23_optimized.txt",
+      "bytes": 216777,
+      "lines": 5606,
+      "domains": 1840,
+      "allow": 0,
+      "effective_rate": 0.3282,
+      "categories": [
+        "intl"
+      ]
+    },
+    "reg-102-id": {
+      "status": "ok",
+      "url": "https://raw.githubusercontent.com/ABPindo/indonesianadblockrules/master/subscriptions/abpindo.txt",
+      "bytes": 319733,
+      "lines": 10429,
+      "domains": 393,
+      "allow": 0,
+      "effective_rate": 0.0377,
+      "categories": [
+        "intl"
+      ]
+    },
+    "reg-105-cs": {
+      "status": "ok",
+      "url": "https://raw.githubusercontent.com/tomasko126/easylistczechandslovak/master/filters.txt",
+      "bytes": 21898,
+      "lines": 679,
+      "domains": 94,
+      "allow": 0,
+      "effective_rate": 0.1384,
+      "categories": [
+        "intl"
+      ]
+    },
+    "reg-106-nl": {
+      "status": "ok",
+      "url": "https://easylist-downloads.adblockplus.org/easylistdutch.txt",
+      "bytes": 69559,
+      "lines": 1582,
+      "domains": 56,
+      "allow": 0,
+      "effective_rate": 0.0354,
+      "categories": [
+        "intl"
+      ]
+    },
+    "reg-107-de": {
+      "status": "ok",
+      "url": "https://easylist.to/easylistgermany/easylistgermany.txt",
+      "bytes": 283110,
+      "lines": 6108,
+      "domains": 315,
+      "allow": 0,
+      "effective_rate": 0.0516,
+      "categories": [
+        "intl"
+      ]
+    },
+    "reg-111-lv": {
+      "status": "ok",
+      "url": "https://raw.githubusercontent.com/Latvian-List/adblock-latvian/master/lists/latvian-list.txt",
+      "bytes": 16198,
+      "lines": 467,
+      "domains": 39,
+      "allow": 0,
+      "effective_rate": 0.0835,
+      "categories": [
+        "intl"
+      ]
+    },
+    "reg-113-fr": {
+      "status": "ok",
+      "url": "https://easylist-downloads.adblockplus.org/liste_fr.txt",
+      "bytes": 441349,
+      "lines": 14518,
+      "domains": 6345,
+      "allow": 0,
+      "effective_rate": 0.437,
+      "categories": [
+        "intl"
+      ]
+    },
+    "reg-114-ro": {
+      "status": "ok",
+      "url": "https://www.zoso.ro/pages/rolist.txt",
+      "bytes": 26671,
+      "lines": 610,
+      "domains": 119,
+      "allow": 0,
+      "effective_rate": 0.1951,
+      "categories": [
+        "intl"
+      ]
+    },
+    "reg-121-el": {
+      "status": "ok",
+      "url": "https://www.void.gr/kargig/void-gr-filters.txt",
+      "bytes": 55100,
+      "lines": 1309,
+      "domains": 28,
+      "allow": 0,
+      "effective_rate": 0.0214,
+      "categories": [
+        "intl"
+      ]
+    },
+    "reg-124-pt": {
+      "status": "ok",
+      "url": "https://easylist-downloads.adblockplus.org/easylistportuguese.txt",
+      "bytes": 75774,
+      "lines": 1750,
+      "domains": 62,
+      "allow": 0,
+      "effective_rate": 0.0354,
+      "categories": [
+        "intl"
+      ]
+    },
+    "reg-202-th": {
+      "status": "ok",
+      "url": "https://raw.githubusercontent.com/easylist-thailand/easylist-thailand/master/subscription/easylist-thailand.txt",
+      "bytes": 46429,
+      "lines": 1643,
+      "domains": 622,
+      "allow": 0,
+      "effective_rate": 0.3786,
+      "categories": [
+        "intl"
+      ]
+    },
+    "reg-203-hu": {
+      "status": "ok",
+      "url": "https://filters.hufilter.hu/hufilter-adguard.txt",
+      "bytes": 97733,
+      "lines": 2284,
+      "domains": 143,
+      "allow": 0,
+      "effective_rate": 0.0626,
+      "categories": [
+        "intl"
+      ]
+    },
+    "reg-206-it": {
+      "status": "ok",
+      "url": "https://raw.githubusercontent.com/gioxx/xfiles/master/filtri.txt",
+      "bytes": 160782,
+      "lines": 4864,
+      "domains": 271,
+      "allow": 1,
+      "effective_rate": 0.0557,
+      "categories": [
+        "intl"
+      ]
+    },
+    "reg-212-ru": {
+      "status": "ok",
+      "url": "https://easylist-downloads.adblockplus.org/cntblock.txt",
+      "bytes": 83758,
+      "lines": 1947,
+      "domains": 532,
+      "allow": 0,
+      "effective_rate": 0.2732,
+      "categories": [
+        "intl"
+      ]
+    },
+    "reg-214-vi": {
+      "status": "ok",
+      "url": "https://raw.githubusercontent.com/abpvn/abpvn/master/filter/abpvn_adguard.txt",
+      "bytes": 55234,
+      "lines": 1219,
+      "domains": 71,
+      "allow": 0,
+      "effective_rate": 0.0582,
+      "categories": [
+        "intl"
+      ]
+    },
+    "reg-216-pl": {
+      "status": "ok",
+      "url": "https://raw.githubusercontent.com/MajkiIT/polish-ads-filter/master/polish-adblock-filters/adblock.txt",
+      "bytes": 345446,
+      "lines": 6153,
+      "domains": 293,
+      "allow": 2,
+      "effective_rate": 0.0476,
+      "categories": [
+        "intl"
+      ]
+    },
+    "reg-218-et": {
+      "status": "ok",
+      "url": "https://ubo-et.lepik.io/list.txt",
+      "bytes": 15487,
+      "lines": 465,
+      "domains": 190,
+      "allow": 1,
+      "effective_rate": 0.4086,
+      "categories": [
+        "intl"
+      ]
+    },
+    "reg-227-ko": {
+      "status": "ok",
+      "url": "https://cdn.jsdelivr.net/npm/@list-kr/filterslists@latest/dist/filterslist-AdGuard-classic.txt",
+      "bytes": 252814,
+      "lines": 4586,
+      "domains": 380,
+      "allow": 1,
+      "effective_rate": 0.0829,
+      "categories": [
+        "intl"
+      ]
+    },
+    "reg-231-es": {
+      "status": "ok",
+      "url": "https://easylist-downloads.adblockplus.org/easylistspanish.txt",
+      "bytes": 128859,
+      "lines": 2728,
+      "domains": 39,
+      "allow": 0,
+      "effective_rate": 0.0143,
+      "categories": [
+        "intl"
+      ]
+    },
+    "reg-236-ro": {
+      "status": "ok",
+      "url": "https://raw.githubusercontent.com/tcptomato/ROad-Block/master/road-block-filters-light.txt",
+      "bytes": 88344,
+      "lines": 2654,
+      "domains": 97,
+      "allow": 0,
+      "effective_rate": 0.0365,
+      "categories": [
+        "intl"
+      ]
+    },
+    "reg-243-sv": {
+      "status": "ok",
+      "url": "https://raw.githubusercontent.com/lassekongo83/Frellwits-filter-lists/master/Frellwits-Swedish-Filter.txt",
+      "bytes": 234230,
+      "lines": 3837,
+      "domains": 302,
+      "allow": 3,
+      "effective_rate": 0.0787,
+      "categories": [
+        "intl"
+      ]
+    },
+    "reg-244-ko": {
+      "status": "ok",
+      "url": "https://raw.githubusercontent.com/yous/YousList/master/youslist.txt",
+      "bytes": 360989,
+      "lines": 7837,
+      "domains": 123,
+      "allow": 0,
+      "effective_rate": 0.0157,
+      "categories": [
+        "intl"
+      ]
+    },
+    "reg-246-pl": {
+      "status": "ok",
+      "url": "https://easylist-downloads.adblockplus.org/easylistpolish.txt",
+      "bytes": 197673,
+      "lines": 3406,
+      "domains": 35,
+      "allow": 0,
+      "effective_rate": 0.0103,
+      "categories": [
+        "intl"
+      ]
+    },
+    "reg-254-mk": {
+      "status": "ok",
+      "url": "https://raw.githubusercontent.com/RandomAdversary/Macedonian-adBlock-Filters/master/Filters",
+      "bytes": 63212,
+      "lines": 825,
+      "domains": 139,
+      "allow": 0,
+      "effective_rate": 0.1685,
+      "categories": [
+        "intl"
+      ]
+    },
+    "goodbye-allow": {
+      "status": "ok",
+      "url": "https://raw.githubusercontent.com/8680/GOODBYEADS/master/data/rules/allow.txt",
+      "bytes": 892011,
+      "lines": 14870,
+      "domains": 89,
+      "effective_rate": 0.006
+    }
+  },
+  "failures": []
+}
