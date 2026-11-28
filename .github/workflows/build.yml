@@ -2,8 +2,8 @@ name: build-rules
 
 on:
   schedule:
-    # 每 7 天 03:00 UTC（北京时间 11:00）重建一次
-    - cron: "0 3 */7 * *"
+    # 每天 10:00 UTC（北京时间 18:00）重建一次
+    - cron: "0 10 * * *"
   push:
     # 源清单或构建脚本变更时立即重建
     branches: [main]
