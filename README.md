@@ -16,28 +16,51 @@ https://raw.githubusercontent.com/Ozero-top/AdguardHome-Rrules/dist/
 ### 512MB 内存
 
 ```
+# 安全防护：恶意软件、病毒下载站、钓鱼与诈骗域名
 https://cdn.jsdelivr.net/gh/Ozero-top/AdguardHome-Rrules@dist/512/security.txt
+
+# 中文站点：中文网站与国内 App 的广告、统计域名
 https://cdn.jsdelivr.net/gh/Ozero-top/AdguardHome-Rrules@dist/512/chinese.txt
+
+# 通用广告：通用广告与推广域名
 https://cdn.jsdelivr.net/gh/Ozero-top/AdguardHome-Rrules@dist/512/ads.txt
 ```
 
 ### 1GB 内存
 
 ```
+# 安全防护：恶意软件、病毒下载站、钓鱼与诈骗域名
 https://cdn.jsdelivr.net/gh/Ozero-top/AdguardHome-Rrules@dist/1024/security.txt
+
+# 中文站点：中文网站与国内 App 的广告、统计域名
 https://cdn.jsdelivr.net/gh/Ozero-top/AdguardHome-Rrules@dist/1024/chinese.txt
+
+# 跟踪统计：埋点、统计、邮件跟踪、跨站跟踪
 https://cdn.jsdelivr.net/gh/Ozero-top/AdguardHome-Rrules@dist/1024/tracking.txt
+
+# 通用广告：通用广告与推广域名
 https://cdn.jsdelivr.net/gh/Ozero-top/AdguardHome-Rrules@dist/1024/ads.txt
 ```
 
 ### 2GB 及以上内存
 
 ```
+# 安全防护：恶意软件、病毒下载站、钓鱼与诈骗域名
 https://cdn.jsdelivr.net/gh/Ozero-top/AdguardHome-Rrules@dist/2048/security.txt
+
+# 中文站点：中文网站与国内 App 的广告、统计域名
 https://cdn.jsdelivr.net/gh/Ozero-top/AdguardHome-Rrules@dist/2048/chinese.txt
+
+# 跟踪统计：埋点、统计、邮件跟踪、跨站跟踪
 https://cdn.jsdelivr.net/gh/Ozero-top/AdguardHome-Rrules@dist/2048/tracking.txt
+
+# 通用广告：通用广告与推广域名
 https://cdn.jsdelivr.net/gh/Ozero-top/AdguardHome-Rrules@dist/2048/ads.txt
+
+# 干扰元素：弹窗、Cookie 提示、移动横幅、应用推荐
 https://cdn.jsdelivr.net/gh/Ozero-top/AdguardHome-Rrules@dist/2048/annoyances.txt
+
+# 外语地区：非中文地区的语言分区广告与统计域名
 https://cdn.jsdelivr.net/gh/Ozero-top/AdguardHome-Rrules@dist/2048/intl.txt
 ```
 
@@ -56,8 +79,8 @@ https://cdn.jsdelivr.net/gh/Ozero-top/AdguardHome-Rrules@dist/manual/nsfw.txt
 | 档位 | 分类文件 | 实测条数 |
 |---|---|---|
 | 512（512MB 内存） | security 15000、chinese 60000、ads 60000 | 135,000 |
-| 1024（1GB 内存） | security 15000、chinese 120000、tracking 8000、ads 90512 | 233,512 |
-| 2048（2GB 及以上） | security 211594、chinese 216857、tracking 55565、ads 90512、annoyances 342、intl 3613 | 578,483 |
+| 1024（1GB 内存） | security 15000、chinese 120000、tracking 8000、ads 100851 | 243,851 |
+| 2048（2GB 及以上） | security 185316、chinese 227255、tracking 57140、ads 100851、annoyances 347、intl 3606 | 574,515 |
 
 - `intl`（外语/地区专项）只进 2048 档：来自 AdGuard for Android 预置的语言分区清单，只收录实测能抽出新增域名的 30 条，512MB/1GB 设备内存占用不受影响。
 
@@ -80,6 +103,7 @@ tools/build.py         # 抓取 → 归一化（含 PSL 校验）→ 分类 → 
 tools/ad-roots.txt     # 手工确认的广告根域（整域兜底）
 tools/protected-domains.txt  # 构建级免拦清单：上游误标的基础服务域，构建时剔除并写入 allowlist
 tools/verify.py        # 门禁：语法、条数、档内重复、波动、源失败率
+tools/release_notes.py # 对比上版 meta.json，生成 Release 说明
 .github/workflows/build.yml
 ```
 
@@ -112,6 +136,7 @@ build/
 
 - 每 7 天 03:00 UTC 自动重建（`.github/workflows/build.yml`）。
 - 支持 `workflow_dispatch` 手动触发。
+- 每次构建自动在 [Releases](https://github.com/Ozero-top/AdguardHome-Rrules/releases) 发布一条说明：各档位分类的条数与增减、源抓取结果与波动最大的源、白名单/免拦/强制拦截清单计数。
 - 门禁不通过时不发布，`dist` 分支保留上一版产物。
 
 ## 许可

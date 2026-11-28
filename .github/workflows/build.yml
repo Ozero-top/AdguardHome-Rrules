@@ -77,6 +77,22 @@ jobs:
           git commit -q -m "rules: $(date -u +%Y-%m-%d)"
           git push --force "https://x-access-token:${{ github.token }}@github.com/${{ github.repository }}.git" dist
 
+      - name: 生成发布说明
+        run: python tools/release_notes.py build/meta.json previous/meta.json release-notes.md
+
+      - name: 发布 Release
+        # 每次构建留一条记录：各档位增减、源波动、维护清单，方便回溯
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -e
+          version=$(python -c "import json;print(json.load(open('build/meta.json'))['version'])")
+          tag="rules-${version}-${{ github.run_number }}"
+          gh release create "$tag" \
+            --title "规则更新 ${version}" \
+            --notes-file release-notes.md \
+            --latest
+
       - name: 清理 jsDelivr 缓存
         # jsDelivr 对 @分支 文件缓存 12 小时，发布后主动 purge，避免订阅端长时间拿到旧产物
         # purge 失败不影响本次发布，仅记录日志
