@@ -137,7 +137,8 @@ build/
 - 每 7 天 03:00 UTC 自动重建（`.github/workflows/build.yml`）。
 - 支持 `workflow_dispatch` 手动触发。
 - 每次构建自动在 [Releases](https://github.com/Ozero-top/AdguardHome-Rrules/releases) 发布一条说明：各档位分类的条数与增减、源抓取结果与波动最大的源、白名单/免拦/强制拦截清单计数。
-- 门禁不通过时不发布，`dist` 分支保留上一版产物。
+- 门禁不通过时不发布，`dist` 分支保留上一版产物，并自动开一条 Issue 附失败原因；同一问题未关闭时只追加评论，不会每周刷屏。
+- 波动阈值：单个分类文件相对上版变化超过 30% **且** 绝对变化 ≥1000 条才判异常，避免 `annoyances`、`intl` 这类小文件的自然波动误报。主动重构时在提交信息里写 `[allow-drift]` 或手动触发时勾选「允许条数波动」即可放行。
 
 ## 许可
 

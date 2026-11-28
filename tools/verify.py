@@ -16,6 +16,7 @@ RULE = re.compile(r"^\|\|[a-z0-9.-]+\^$")
 HEADER = re.compile(r"^!")
 COUNT = re.compile(r"^! Count: (\d+)$")
 DRIFT_LIMIT = 0.30      # 单文件条数相对上轮变化超过 30% 视为异常
+DRIFT_MIN = 1000        # 绝对变化不足这么多条时不算异常，避免小文件自然波动误报
 MIN_TOTAL = 1000        # 任一档位总条数下限
 
 
@@ -113,7 +114,7 @@ def main():
                     continue
                 if old == 0 and current == 0:
                     continue
-                if old and abs(current - old) / old > DRIFT_LIMIT:
+                if old and abs(current - old) / old > DRIFT_LIMIT and abs(current - old) >= DRIFT_MIN:
                     fail(errors, "%s/%s 条数从 %d 变为 %d，波动超过 %d%%"
                          % (tier, name, old, current, int(DRIFT_LIMIT * 100)))
 
