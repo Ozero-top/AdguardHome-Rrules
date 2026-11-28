@@ -44,7 +44,31 @@ jobs:
         run: |
           mkdir -p previous
           git fetch --depth=1 origin dist || true
-          git show FETCH_HEAD:meta.json > previous/meta.json 2>/dev/null || true
+          git archive FETCH_HEAD 2>/dev/null | tar -x -C previous 2>/dev/null || true
+
+      - name: 检测产物是否有变化
+        id: diff
+        # 上游当天没更新时规则内容完全一致，此时不必重推 dist、也不必发 Release。
+        # 文件头含 Version/Updated，每次都不同，只能比较去掉 ! 注释后的规则行。
+        run: |
+          set -u
+          changed=true
+          if [ -f previous/meta.json ]; then
+            changed=false
+            while IFS= read -r file; do
+              rel="${file#build/}"
+              if [ ! -f "previous/$rel" ] || \
+                 ! diff -q <(grep -v '^!' "$file") <(grep -v '^!' "previous/$rel") > /dev/null; then
+                echo "变化：$rel"
+                changed=true
+                break
+              fi
+            done < <(find build -type f -name '*.txt' | sort)
+          else
+            echo "无上轮产物，视为有变化"
+          fi
+          echo "changed=$changed" >> "$GITHUB_OUTPUT"
+          echo "本次是否有变化：$changed"
 
       - name: 产物门禁
         run: |
@@ -67,6 +91,7 @@ jobs:
           retention-days: 30
 
       - name: 发布到 dist 分支
+        if: steps.diff.outputs.changed == 'true'
         run: |
           set -e
           rm -rf /tmp/publish
@@ -82,10 +107,12 @@ jobs:
           git push --force "https://x-access-token:${{ github.token }}@github.com/${{ github.repository }}.git" dist
 
       - name: 生成发布说明
+        if: steps.diff.outputs.changed == 'true'
         run: python tools/release_notes.py build/meta.json previous/meta.json release-notes.md
 
       - name: 发布 Release
         # 每次构建留一条记录：各档位增减、源波动、维护清单，方便回溯
+        if: steps.diff.outputs.changed == 'true'
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
@@ -100,6 +127,7 @@ jobs:
       - name: 清理 jsDelivr 缓存
         # jsDelivr 对 @分支 文件缓存 12 小时，发布后主动 purge，避免订阅端长时间拿到旧产物
         # purge 失败不影响本次发布，仅记录日志
+        if: steps.diff.outputs.changed == 'true'
         run: |
           set -u
           # 等 jsDelivr 感知到 dist 分支新提交后再发 purge
